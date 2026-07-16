@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Flow — Workflow Automation Platform</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/themes.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+</head>
+<body data-theme="light">
+  <!-- ====== Authentication Overlay ====== -->
+  <div id="authOverlay" class="auth-overlay">
+    <div class="auth-card" id="authCard">
+      <div class="auth-header">
+        <div class="auth-logo">
+          <svg width="36" height="36" viewBox="0 0 36 36"><rect x="2" y="2" width="32" height="32" rx="8" fill="#4F46E5"/><path d="M10 18l5 5 11-11" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>AI Flow</span>
+        </div>
+        <button class="btn-icon theme-toggle-auth" id="themeToggleAuth" title="Toggle theme">🌓</button>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Sign In</button>
+        <button class="auth-tab" data-tab="register">Create Account</button>
+      </div>
+      <form id="loginForm" class="auth-form active">
+        <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com" required /></div>
+        <div class="form-group"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••" required /></div>
+        <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+        <p class="auth-error" id="loginError"></p>
+      </form>
+      <form id="registerForm" class="auth-form">
+        <div class="form-group"><label>Full Name</label><input type="text" id="regName" placeholder="Your name" required /></div>
+        <div class="form-group"><label>Email</label><input type="email" id="regEmail" placeholder="you@example.com" required /></div>
+        <div class="form-group"><label>Password</label><input type="password" id="regPass" placeholder="Min 6 characters" minlength="6" required /></div>
+        <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+        <p class="auth-error" id="regError"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ====== Main App Layout ====== -->
+  <div id="appContainer" class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <svg width="28" height="28" viewBox="0 0 36 36"><rect x="2" y="2" width="32" height="32" rx="8" fill="#4F46E5"/><path d="M10 18l5 5 11-11" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="brand-text">AI Flow</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-view="workflows">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Workflows</span>
+        </a>
+        <a href="#" class="nav-item" data-view="builder">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="16" r="3"/><line x1="10.5" y1="10.5" x2="13.5" y2="13.5"/></svg>
+          <span>Builder</span>
+        </a>
+        <a href="#" class="nav-item" data-view="agent">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"/></svg>
+          <span>AI Agent</span>
+        </a>
+        <a href="#" class="nav-item" data-view="chat">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>AI Chat</span>
+        </a>
+        <a href="#" class="nav-item" data-view="history">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>History</span>
+        </a>
+        <a href="#" class="nav-item" data-view="integrations">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="4"/><path d="M9 12h6M12 9v6"/></svg>
+          <span>Integrations</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-icon theme-toggle-sidebar" id="themeToggleSide" title="Toggle dark/light mode">🌙</button>
+        <button class="btn-icon" id="logoutBtn" title="Sign out">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="btn-icon hamburger" id="hamburgerBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h2 class="view-title" id="viewTitle">Workflows</h2>
+        </div>
+        <div class="topbar-right">
+          <span class="user-badge" id="userBadge"></span>
+        </div>
+      </header>
+
+      <!-- View Containers -->
+      <div class="view-container">
+        <!-- Workflows List View -->
+        <section class="view-panel active" id="view-workflows">
+          <div class="view-header">
+            <h3>My Workflows</h3>
+            <button class="btn btn-primary" id="createWorkflowBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Workflow
+            </button>
+          </div>
+          <div class="workflow-grid" id="workflowGrid"></div>
+          <div class="empty-state" id="emptyWorkflows">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M12 9v6"/></svg>
+            <h4>No Workflows Yet</h4>
+            <p>Create your first automation workflow to get started.</p>
+            <button class="btn btn-primary" id="createWorkflowBtn2">Create Workflow</button>
+          </div>
+        </section>
+
+        <!-- Workflow Builder View -->
+        <section class="view-panel" id="view-builder">
+          <div class="builder-toolbar">
+            <div class="toolbar-group">
+              <button class="btn btn-sm" id="saveWorkflowBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                Save
+              </button>
+              <button class="btn btn-sm btn-success" id="runWorkflowBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Run
+              </button>
+              <button class="btn btn-sm btn-outline" id="exportWorkflowBtn">Export</button>
+              <button class="btn btn-sm btn-outline" id="importWorkflowBtn">Import</button>
+            </div>
+            <div class="toolbar-group">
+              <input type="text" class="workflow-name-input" id="workflowNameInput" placeholder="Untitled Workflow" maxlength="60" />
+            </div>
+          </div>
+          <div class="builder-layout">
+            <!-- Node Palette -->
+            <div class="node-palette" id="nodePalette">
+              <h4>Nodes</h4>
+              <div class="palette-group">
+                <h5>Triggers</h5>
+                <div class="palette-node" draggable="true" data-node-type="webhook">
+                  <span class="node-icon" style="background:#8B5CF6">⚡</span> Webhook
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="schedule">
+                  <span class="node-icon" style="background:#F59E0B">🕐</span> Schedule
+                </div>
+              </div>
+              <div class="palette-group">
+                <h5>AI</h5>
+                <div class="palette-node" draggable="true" data-node-type="ai-agent">
+                  <span class="node-icon" style="background:#6366F1">🧠</span> AI Agent
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="ai-chat">
+                  <span class="node-icon" style="background:#EC4899">💬</span> AI Chat
+                </div>
+              </div>
+              <div class="palette-group">
+                <h5>Communication</h5>
+                <div class="palette-node" draggable="true" data-node-type="gmail">
+                  <span class="node-icon" style="background:#EA4335">📧</span> Gmail
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="telegram">
+                  <span class="node-icon" style="background:#26A5E4">📨</span> Telegram
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="whatsapp">
+                  <span class="node-icon" style="background:#25D366">💚</span> WhatsApp
+                </div>
+              </div>
+              <div class="palette-group">
+                <h5>Data</h5>
+                <div class="palette-node" draggable="true" data-node-type="sheets">
+                  <span class="node-icon" style="background:#34A853">📊</span> Google Sheets
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="http-request">
+                  <span class="node-icon" style="background:#06B6D4">🌐</span> HTTP Request
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="database">
+                  <span class="node-icon" style="background:#78716C">🗄️</span> Database
+                </div>
+              </div>
+              <div class="palette-group">
+                <h5>Logic</h5>
+                <div class="palette-node" draggable="true" data-node-type="condition">
+                  <span class="node-icon" style="background:#F97316">🔀</span> Condition
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="loop">
+                  <span class="node-icon" style="background:#14B8A6">🔁</span> Loop
+                </div>
+              </div>
+            </div>
+            <!-- Canvas -->
+            <div class="flow-canvas" id="flowCanvas">
+              <div class="canvas-grid" id="canvasGrid"></div>
+              <svg class="connections-layer" id="connectionsLayer"></svg>
+              <div class="canvas-drop-zone" id="canvasDropZone">
+                <p>Drag nodes from the palette here</p>
+              </div>
+            </div>
+          </div>
+          <!-- Node Config Modal -->
+          <div class="modal-overlay" id="nodeConfigModal">
+            <div class="modal-card">
+              <div class="modal-header">
+                <h3 id="nodeConfigTitle">Configure Node</h3>
+                <button class="btn-icon modal-close" id="nodeConfigClose">✕</button>
+              </div>
+              <div class="modal-body" id="nodeConfigBody"></div>
+              <div class="modal-footer">
+                <button class="btn btn-outline" id="nodeConfigCancel">Cancel</button>
+                <button class="btn btn-primary" id="nodeConfigSave">Save</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Agent View -->
+        <section class="view-panel" id="view-agent">
+          <div class="agent-layout">
+            <div class="agent-config">
+              <h3>AI Agent Configuration</h3>
+              <div class="form-group">
+                <label>Agent Name</label>
+                <input type="text" id="agentName" placeholder="My AI Agent" />
+              </div>
+              <div class="form-group">
+                <label>System Prompt</label>
+                <textarea id="agentSystemPrompt" rows="4" placeholder="You are a helpful automation assistant..."></textarea>
+              </div>
+              <div class="form-group">
+                <label>Model</label>
+                <select id="agentModel">
+                  <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                  <option value="gemini-2.0-pro">Gemini 2.0 Pro</option>
+                  <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                  <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Temperature</label>
+                <input type="range" id="agentTemperature" min="0" max="1" step="0.1" value="0.7" />
+                <span class="range-value" id="tempValue">0.7</span>
+              </div>
+              <div class="form-group">
+                <label>Max Tokens</label>
+                <input type="number" id="agentMaxTokens" value="2048" min="1" max="8192" />
+              </div>
+              <div class="form-group">
+                <label>Google Gemini API Key</label>
+                <div class="input-with-btn">
+                  <input type="password" id="geminiApiKey" placeholder="AIzaSy..." />
+                  <button class="btn btn-sm" id="toggleApiKey">👁️</button>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-full" id="saveAgentConfig">Save Configuration</button>
+              <div class="agent-tools">
+                <h4>Enabled Tools</h4>
+                <label class="checkbox-item"><input type="checkbox" checked /> Web Search</label>
+                <label class="checkbox-item"><input type="checkbox" checked /> Execute HTTP Requests</label>
+                <label class="checkbox-item"><input type="checkbox" checked /> Send Emails (Gmail)</label>
+                <label class="checkbox-item"><input type="checkbox" /> Read Google Sheets</label>
+                <label class="checkbox-item"><input type="checkbox" /> Send Telegram Messages</label>
+                <label class="checkbox-item"><input type="checkbox" /> Send WhatsApp Messages</label>
+              </div>
+            </div>
+            <div class="agent-preview">
+              <h3>Test Your Agent</h3>
+              <div class="agent-chat-window" id="agentChatWindow">
+                <div class="agent-chat-messages" id="agentChatMessages">
+                  <div class="agent-message system">👋 Hello! I'm your AI Agent. Configure me on the left and start chatting!</div>
+                </div>
+                <div class="agent-chat-input">
+                  <input type="text" id="agentChatInput" placeholder="Ask your agent anything..." />
+                  <button class="btn btn-primary" id="agentChatSend">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Chat View -->
+        <section class="view-panel" id="view-chat">
+          <div class="chat-layout">
+            <div class="chat-sidebar">
+              <h4>Conversations</h4>
+              <button class="btn btn-primary btn-full btn-sm" id="newChatBtn">+ New Chat</button>
+              <div class="chat-list" id="chatList"></div>
+            </div>
+            <div class="chat-main">
+              <div class="chat-messages" id="chatMessages">
+                <div class="chat-welcome">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="1.5"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"/></svg>
+                  <h3>AI Chat</h3>
+                  <p>Powered by Google Gemini API. Start a conversation!</p>
+                </div>
+              </div>
+              <div class="chat-input-area">
+                <textarea id="chatInput" rows="1" placeholder="Type a message..."></textarea>
+                <button class="btn btn-primary" id="chatSendBtn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- History View -->
+        <section class="view-panel" id="view-history">
+          <div class="view-header">
+            <h3>Workflow Run History</h3>
+            <div class="history-filters">
+              <select id="historyStatusFilter">
+                <option value="all">All Status</option>
+                <option value="success">Success</option>
+                <option value="failed">Failed</option>
+                <option value="running">Running</option>
+              </select>
+              <button class="btn btn-sm btn-outline" id="clearHistoryBtn">Clear History</button>
+            </div>
+          </div>
+          <div class="history-table-wrapper">
+            <table class="history-table">
+              <thead>
+                <tr><th>Workflow</th><th>Status</th><th>Started</th><th>Duration</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="historyTableBody"></tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="emptyHistory">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <h4>No Run History</h4>
+            <p>Run your workflows to see execution history here.</p>
+          </div>
+        </section>
+
+        <!-- Integrations View -->
+        <section class="view-panel" id="view-integrations">
+          <div class="view-header"><h3>Integrations</h3></div>
+          <div class="integrations-grid" id="integrationsGrid">
+            <!-- Generated by JS -->
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Import Modal -->
+  <div class="modal-overlay" id="importModal">
+    <div class="modal-card">
+      <div class="modal-header"><h3>Import Workflow</h3><button class="btn-icon modal-close" id="importModalClose">✕</button></div>
+      <div class="modal-body">
+        <textarea id="importJson" rows="10" placeholder='Paste workflow JSON here...'></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="importCancel">Cancel</button>
+        <button class="btn btn-primary" id="importConfirm">Import</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/toast.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/workflows.js"></script>
+  <script src="assets/js/builder.js"></script>
+  <script src="assets/js/agent.js"></script>
+  <script src="assets/js/chat.js"></script>
+  <script src="assets/js/history.js"></script>
+  <script src="assets/js/integrations.js"></script>
+  <script src="assets/js/gemini-api.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

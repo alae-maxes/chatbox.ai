@@ -1,0 +1,52 @@
+/* ============================================================
+   AI Flow — Dark Mode Theme
+   ============================================================ */
+
+[data-theme="dark"] {
+  --bg-primary: #0F172A;
+  --bg-secondary: #1E293B;
+  --bg-tertiary: #1E293B;
+  --bg-card: #1E293B;
+  --bg-sidebar: #0F172A;
+  --bg-hover: #334155;
+  --bg-active: #1E1B4B;
+
+  --border-light: #1E293B;
+  --border-medium: #334155;
+  --border-focus: #818CF8;
+
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-tertiary: #64748B;
+  --text-inverse: #0F172A;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.4);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.5);
+  --shadow-xl: 0 20px 25px rgba(0,0,0,0.6);
+}
+
+[data-theme="dark"] .modal-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .flow-canvas {
+  background-image:
+    radial-gradient(circle, var(--border-medium) 1px, transparent 1px);
+}
+
+[data-theme="dark"] .status-badge.success { background: #064E3B; color: #6EE7B7; }
+[data-theme="dark"] .status-badge.failed { background: #7F1D1D; color: #FCA5A5; }
+[data-theme="dark"] .status-badge.running { background: #1E3A5F; color: #93C5FD; }
+
+[data-theme="dark"] .agent-message.system {
+  background: var(--bg-active);
+  color: #A5B4FC;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}

@@ -1,0 +1,3941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Flow — Workflow Automation Platform</title>
+  <style>
+/* ============================================================
+   AI Flow — Main Stylesheet
+   Clean, modern, minimal design on white background
+   ============================================================ */
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Light theme (default) */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-tertiary: #F1F5F9;
+  --bg-card: #FFFFFF;
+  --bg-sidebar: #FFFFFF;
+  --bg-hover: #F1F5F9;
+  --bg-active: #EEF2FF;
+
+  --border-light: #E2E8F0;
+  --border-medium: #CBD5E1;
+  --border-focus: #6366F1;
+
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-tertiary: #94A3B8;
+  --text-inverse: #FFFFFF;
+
+  --brand-500: #6366F1;
+  --brand-600: #4F46E5;
+  --brand-700: #4338CA;
+
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05);
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --sidebar-width: 220px;
+  --topbar-height: 56px;
+  --transition: 0.2s ease;
+}
+
+/* --- Font --- */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* --- Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  background: transparent;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.btn:hover { opacity: 0.9; }
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--brand-600);
+  color: var(--text-inverse);
+}
+.btn-primary:hover { background: var(--brand-700); }
+
+.btn-success { background: var(--success); color: #fff; }
+.btn-danger { background: var(--error); color: #fff; }
+.btn-outline { border-color: var(--border-medium); background: transparent; }
+.btn-outline:hover { background: var(--bg-hover); }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-full { width: 100%; justify-content: center; }
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition);
+}
+.btn-icon:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+/* --- Forms --- */
+.form-group { margin-bottom: 14px; }
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  transition: border var(--transition);
+  outline: none;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+.form-group textarea { resize: vertical; min-height: 80px; }
+.form-group select { cursor: pointer; }
+
+.input-with-btn {
+  display: flex;
+  gap: 4px;
+}
+.input-with-btn input { flex: 1; }
+.input-with-btn .btn { flex-shrink: 0; }
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+.checkbox-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--brand-600);
+}
+
+/* --- Auth Overlay --- */
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.auth-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.auth-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: 32px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid var(--border-light);
+}
+
+.auth-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 24px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: 3px;
+}
+.auth-tab {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all var(--transition);
+}
+.auth-tab.active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.auth-form { display: none; }
+.auth-form.active { display: block; }
+
+.auth-error {
+  color: var(--error);
+  font-size: 12px;
+  margin-top: 8px;
+  min-height: 18px;
+}
+
+/* --- App Container --- */
+.app-container {
+  display: flex;
+  height: 100vh;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.app-container.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  height: var(--topbar-height);
+  border-bottom: 1px solid var(--border-light);
+}
+.brand-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 8px;
+  overflow-y: auto;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition);
+  margin-bottom: 2px;
+}
+.nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.nav-item.active {
+  background: var(--bg-active);
+  color: var(--brand-600);
+}
+
+.sidebar-footer {
+  padding: 8px;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-around;
+}
+
+/* --- Topbar --- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--topbar-height);
+  padding: 0 20px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.view-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.hamburger { display: none; }
+.user-badge {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  background: var(--bg-tertiary);
+  border-radius: 20px;
+}
+
+/* --- Main Content --- */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.view-container {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+.view-panel {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: 20px;
+  display: none;
+}
+.view-panel.active { display: flex; flex-direction: column; }
+
+.view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+.view-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* --- Empty State --- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--text-tertiary);
+  text-align: center;
+  flex: 1;
+}
+.empty-state svg { margin-bottom: 16px; opacity: 0.4; }
+.empty-state h4 {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.empty-state p {
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+/* --- Workflow Grid --- */
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.workflow-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+}
+.workflow-card:hover {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.workflow-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.workflow-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.workflow-card-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.workflow-card-status.active { background: var(--success); }
+.workflow-card-status.draft { background: var(--text-tertiary); }
+.workflow-card-status.paused { background: var(--warning); }
+
+.workflow-card-desc {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+.workflow-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+.workflow-card-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 12px;
+}
+.workflow-card-actions .btn { font-size: 11px; padding: 4px 10px; }
+
+/* --- Builder --- */
+.builder-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.workflow-name-input {
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  outline: none;
+  width: 200px;
+}
+.workflow-name-input:focus {
+  border-color: var(--border-medium);
+  background: var(--bg-primary);
+}
+
+.builder-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Node Palette */
+.node-palette {
+  width: 200px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-light);
+  overflow-y: auto;
+  padding: 12px;
+  flex-shrink: 0;
+}
+.node-palette h4 {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+.palette-group { margin-bottom: 16px; }
+.palette-group h5 {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.palette-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  cursor: grab;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  margin-bottom: 4px;
+  transition: all var(--transition);
+  user-select: none;
+}
+.palette-node:hover {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-sm);
+}
+.palette-node:active { cursor: grabbing; }
+.node-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* Canvas */
+.flow-canvas {
+  flex: 1;
+  position: relative;
+  overflow: auto;
+  background: var(--bg-tertiary);
+  background-image:
+    radial-gradient(circle, var(--border-light) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.canvas-drop-zone {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+.canvas-drop-zone.hidden { display: none; }
+
+.connections-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+.connections-layer path {
+  stroke: var(--brand-500);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+}
+.connections-layer path.selected {
+  stroke: var(--warning);
+  stroke-width: 3;
+}
+
+/* Canvas Nodes */
+.canvas-node {
+  position: absolute;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 0;
+  min-width: 180px;
+  cursor: move;
+  box-shadow: var(--shadow-md);
+  z-index: 20;
+  transition: border var(--transition), box-shadow var(--transition);
+  user-select: none;
+}
+.canvas-node:hover { border-color: var(--border-focus); box-shadow: var(--shadow-lg); }
+.canvas-node.selected { border-color: var(--brand-500); box-shadow: 0 0 0 2px rgba(99,102,241,0.2); }
+.canvas-node.running { border-color: var(--success); animation: pulse 1.5s infinite; }
+.canvas-node.error { border-color: var(--error); }
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+}
+
+.node-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.node-body {
+  padding: 10px 12px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+.node-port {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--border-focus);
+  cursor: crosshair;
+  z-index: 30;
+  transition: all var(--transition);
+}
+.node-port:hover { background: var(--brand-500); transform: scale(1.2); }
+.node-port.input { top: 50%; left: -6px; transform: translateY(-50%); }
+.node-port.output { top: 50%; right: -6px; transform: translateY(-50%); }
+
+/* --- Modal --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(15, 23, 42, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.active { display: flex; }
+.modal-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  width: 100%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid var(--border-light);
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+.modal-header h3 { font-size: 16px; font-weight: 600; }
+.modal-close { font-size: 18px; }
+.modal-body { padding: 20px; }
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-light);
+}
+
+/* --- Toast --- */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  box-shadow: var(--shadow-lg);
+  animation: slideInRight 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 360px;
+}
+.toast.success { background: var(--success); }
+.toast.error { background: var(--error); }
+.toast.info { background: var(--info); }
+.toast.warning { background: var(--warning); color: #000; }
+.toast.exiting { animation: slideOutRight 0.3s ease forwards; }
+
+@keyframes slideInRight {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(120%); opacity: 0; }
+}
+
+/* --- Agent View --- */
+.agent-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
+  flex: 1;
+  overflow: hidden;
+}
+.agent-config {
+  overflow-y: auto;
+  padding-right: 8px;
+}
+.agent-config h3 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+.agent-tools { margin-top: 20px; }
+.agent-tools h4 { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-secondary); }
+
+.agent-preview { overflow: hidden; display: flex; flex-direction: column; }
+.agent-preview h3 { font-size: 16px; font-weight: 600; margin-bottom: 12px; flex-shrink: 0; }
+.agent-chat-window {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+.agent-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+.agent-message {
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  margin-bottom: 8px;
+  font-size: 13px;
+  max-width: 80%;
+  line-height: 1.5;
+}
+.agent-message.system {
+  background: var(--bg-active);
+  color: var(--brand-700);
+  align-self: flex-start;
+}
+.agent-message.user {
+  background: var(--brand-600);
+  color: #fff;
+  align-self: flex-end;
+  margin-left: auto;
+}
+.agent-message.bot {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  align-self: flex-start;
+}
+.agent-chat-input {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-card);
+}
+.agent-chat-input input { flex: 1; }
+
+.range-value {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-left: 8px;
+  font-weight: 600;
+}
+
+/* --- Chat View --- */
+.chat-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+.chat-sidebar {
+  width: 240px;
+  border-right: 1px solid var(--border-light);
+  padding: 16px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.chat-sidebar h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.chat-list { margin-top: 12px; }
+.chat-list-item {
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  transition: background var(--transition);
+}
+.chat-list-item:hover { background: var(--bg-hover); }
+.chat-list-item.active { background: var(--bg-active); color: var(--brand-600); }
+
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.chat-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--text-tertiary);
+  text-align: center;
+  flex: 1;
+}
+.chat-welcome h3 { color: var(--text-secondary); margin: 12px 0 6px; }
+.chat-message {
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 8px;
+  font-size: 14px;
+  max-width: 75%;
+  line-height: 1.6;
+}
+.chat-message.user {
+  background: var(--brand-600);
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+.chat-message.bot {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  border: 1px solid var(--border-light);
+}
+.chat-input-area {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-primary);
+}
+.chat-input-area textarea {
+  flex: 1;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  min-height: 40px;
+  max-height: 120px;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+}
+.chat-input-area textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+}
+
+/* --- History Table --- */
+.history-filters {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.history-table-wrapper { overflow-x: auto; flex: 1; }
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.history-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--border-light);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.history-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-primary);
+}
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.status-badge.success { background: #D1FAE5; color: #065F46; }
+.status-badge.failed { background: #FEE2E2; color: #991B1B; }
+.status-badge.running { background: #DBEAFE; color: #1E40AF; }
+
+/* --- Integrations Grid --- */
+.integrations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+.integration-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.integration-card:hover {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-md);
+}
+.integration-card.connected { border-left: 3px solid var(--success); }
+.integration-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.integration-card-info { flex: 1; min-width: 0; }
+.integration-card-name { font-size: 14px; font-weight: 600; }
+.integration-card-status {
+  font-size: 11px;
+  margin-top: 2px;
+}
+.integration-card-status.connected-status { color: var(--success); }
+.integration-card-status.disconnected-status { color: var(--text-tertiary); }
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+/* ============================================================
+   AI Flow — Dark Mode Theme
+   ============================================================ */
+
+[data-theme="dark"] {
+  --bg-primary: #0F172A;
+  --bg-secondary: #1E293B;
+  --bg-tertiary: #1E293B;
+  --bg-card: #1E293B;
+  --bg-sidebar: #0F172A;
+  --bg-hover: #334155;
+  --bg-active: #1E1B4B;
+
+  --border-light: #1E293B;
+  --border-medium: #334155;
+  --border-focus: #818CF8;
+
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-tertiary: #64748B;
+  --text-inverse: #0F172A;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.4);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.5);
+  --shadow-xl: 0 20px 25px rgba(0,0,0,0.6);
+}
+
+[data-theme="dark"] .modal-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .flow-canvas {
+  background-image:
+    radial-gradient(circle, var(--border-medium) 1px, transparent 1px);
+}
+
+[data-theme="dark"] .status-badge.success { background: #064E3B; color: #6EE7B7; }
+[data-theme="dark"] .status-badge.failed { background: #7F1D1D; color: #FCA5A5; }
+[data-theme="dark"] .status-badge.running { background: #1E3A5F; color: #93C5FD; }
+
+[data-theme="dark"] .agent-message.system {
+  background: var(--bg-active);
+  color: #A5B4FC;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   AI Flow — Responsive Design
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .agent-layout {
+    grid-template-columns: 1fr;
+  }
+  .agent-config {
+    max-height: 300px;
+  }
+
+  .chat-sidebar {
+    width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 0px;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: -260px;
+    width: 260px;
+    transition: left 0.3s ease;
+    z-index: 200;
+  }
+  .sidebar.open {
+    left: 0;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .builder-layout {
+    flex-direction: column;
+  }
+  .node-palette {
+    width: 100%;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .node-palette h4 { display: none; }
+  .palette-group {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+  .palette-group h5 { display: none; }
+  .palette-node {
+    font-size: 11px;
+    padding: 6px 8px;
+    white-space: nowrap;
+  }
+
+  .chat-layout {
+    flex-direction: column;
+  }
+  .chat-sidebar {
+    width: 100%;
+    max-height: 150px;
+  }
+
+  .workflow-grid {
+    grid-template-columns: 1fr;
+  }
+  .integrations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-card {
+    margin: 20px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .builder-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .toolbar-group {
+    justify-content: center;
+  }
+
+  .auth-card {
+    margin: 16px;
+    padding: 24px;
+  }
+
+  .topbar {
+    padding: 0 12px;
+  }
+  .view-panel {
+    padding: 12px;
+  }
+
+  .history-table {
+    font-size: 11px;
+  }
+}
+
+
+</style>
+</head>
+<body data-theme="light">
+  <!-- ====== Authentication Overlay ====== -->
+  <div id="authOverlay" class="auth-overlay">
+    <div class="auth-card" id="authCard">
+      <div class="auth-header">
+        <div class="auth-logo">
+          <svg width="36" height="36" viewBox="0 0 36 36"><rect x="2" y="2" width="32" height="32" rx="8" fill="#4F46E5"/><path d="M10 18l5 5 11-11" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>AI Flow</span>
+        </div>
+        <button class="btn-icon theme-toggle-auth" id="themeToggleAuth" title="Toggle theme">🌓</button>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Sign In</button>
+        <button class="auth-tab" data-tab="register">Create Account</button>
+      </div>
+      <form id="loginForm" class="auth-form active">
+        <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com" required /></div>
+        <div class="form-group"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••" required /></div>
+        <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+        <p class="auth-error" id="loginError"></p>
+      </form>
+      <form id="registerForm" class="auth-form">
+        <div class="form-group"><label>Full Name</label><input type="text" id="regName" placeholder="Your name" required /></div>
+        <div class="form-group"><label>Email</label><input type="email" id="regEmail" placeholder="you@example.com" required /></div>
+        <div class="form-group"><label>Password</label><input type="password" id="regPass" placeholder="Min 6 characters" minlength="6" required /></div>
+        <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+        <p class="auth-error" id="regError"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ====== Main App Layout ====== -->
+  <div id="appContainer" class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <svg width="28" height="28" viewBox="0 0 36 36"><rect x="2" y="2" width="32" height="32" rx="8" fill="#4F46E5"/><path d="M10 18l5 5 11-11" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="brand-text">AI Flow</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-view="workflows">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Workflows</span>
+        </a>
+        <a href="#" class="nav-item" data-view="builder">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="16" r="3"/><line x1="10.5" y1="10.5" x2="13.5" y2="13.5"/></svg>
+          <span>Builder</span>
+        </a>
+        <a href="#" class="nav-item" data-view="agent">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"/></svg>
+          <span>AI Agent</span>
+        </a>
+        <a href="#" class="nav-item" data-view="chat">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>AI Chat</span>
+        </a>
+        <a href="#" class="nav-item" data-view="history">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>History</span>
+        </a>
+        <a href="#" class="nav-item" data-view="integrations">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="4"/><path d="M9 12h6M12 9v6"/></svg>
+          <span>Integrations</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-icon theme-toggle-sidebar" id="themeToggleSide" title="Toggle dark/light mode">🌙</button>
+        <button class="btn-icon" id="logoutBtn" title="Sign out">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="btn-icon hamburger" id="hamburgerBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h2 class="view-title" id="viewTitle">Workflows</h2>
+        </div>
+        <div class="topbar-right">
+          <span class="user-badge" id="userBadge"></span>
+        </div>
+      </header>
+
+      <!-- View Containers -->
+      <div class="view-container">
+        <!-- Workflows List View -->
+        <section class="view-panel active" id="view-workflows">
+          <div class="view-header">
+            <h3>My Workflows</h3>
+            <button class="btn btn-primary" id="createWorkflowBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Workflow
+            </button>
+          </div>
+          <div class="workflow-grid" id="workflowGrid"></div>
+          <div class="empty-state" id="emptyWorkflows">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M12 9v6"/></svg>
+            <h4>No Workflows Yet</h4>
+            <p>Create your first automation workflow to get started.</p>
+            <button class="btn btn-primary" id="createWorkflowBtn2">Create Workflow</button>
+          </div>
+        </section>
+
+        <!-- Workflow Builder View -->
+        <section class="view-panel" id="view-builder">
+          <div class="builder-toolbar">
+            <div class="toolbar-group">
+              <button class="btn btn-sm" id="saveWorkflowBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                Save
+              </button>
+              <button class="btn btn-sm btn-success" id="runWorkflowBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Run
+              </button>
+              <button class="btn btn-sm btn-outline" id="exportWorkflowBtn">Export</button>
+              <button class="btn btn-sm btn-outline" id="importWorkflowBtn">Import</button>
+            </div>
+            <div class="toolbar-group">
+              <input type="text" class="workflow-name-input" id="workflowNameInput" placeholder="Untitled Workflow" maxlength="60" />
+            </div>
+          </div>
+          <div class="builder-layout">
+            <!-- Node Palette -->
+            <div class="node-palette" id="nodePalette">
+              <h4>Nodes</h4>
+              <div class="palette-group">
+                <h5>Triggers</h5>
+                <div class="palette-node" draggable="true" data-node-type="webhook">
+                  <span class="node-icon" style="background:#8B5CF6">⚡</span> Webhook
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="schedule">
+                  <span class="node-icon" style="background:#F59E0B">🕐</span> Schedule
+                </div>
+              </div>
+              <div class="palette-group">
+                <h5>AI</h5>
+                <div class="palette-node" draggable="true" data-node-type="ai-agent">
+                  <span class="node-icon" style="background:#6366F1">🧠</span> AI Agent
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="ai-chat">
+                  <span class="node-icon" style="background:#EC4899">💬</span> AI Chat
+                </div>
+              </div>
+              <div class="palette-group">
+                <h5>Communication</h5>
+                <div class="palette-node" draggable="true" data-node-type="gmail">
+                  <span class="node-icon" style="background:#EA4335">📧</span> Gmail
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="telegram">
+                  <span class="node-icon" style="background:#26A5E4">📨</span> Telegram
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="whatsapp">
+                  <span class="node-icon" style="background:#25D366">💚</span> WhatsApp
+                </div>
+              </div>
+              <div class="palette-group">
+                <h5>Data</h5>
+                <div class="palette-node" draggable="true" data-node-type="sheets">
+                  <span class="node-icon" style="background:#34A853">📊</span> Google Sheets
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="http-request">
+                  <span class="node-icon" style="background:#06B6D4">🌐</span> HTTP Request
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="database">
+                  <span class="node-icon" style="background:#78716C">🗄️</span> Database
+                </div>
+              </div>
+              <div class="palette-group">
+                <h5>Logic</h5>
+                <div class="palette-node" draggable="true" data-node-type="condition">
+                  <span class="node-icon" style="background:#F97316">🔀</span> Condition
+                </div>
+                <div class="palette-node" draggable="true" data-node-type="loop">
+                  <span class="node-icon" style="background:#14B8A6">🔁</span> Loop
+                </div>
+              </div>
+            </div>
+            <!-- Canvas -->
+            <div class="flow-canvas" id="flowCanvas">
+              <div class="canvas-grid" id="canvasGrid"></div>
+              <svg class="connections-layer" id="connectionsLayer"></svg>
+              <div class="canvas-drop-zone" id="canvasDropZone">
+                <p>Drag nodes from the palette here</p>
+              </div>
+            </div>
+          </div>
+          <!-- Node Config Modal -->
+          <div class="modal-overlay" id="nodeConfigModal">
+            <div class="modal-card">
+              <div class="modal-header">
+                <h3 id="nodeConfigTitle">Configure Node</h3>
+                <button class="btn-icon modal-close" id="nodeConfigClose">✕</button>
+              </div>
+              <div class="modal-body" id="nodeConfigBody"></div>
+              <div class="modal-footer">
+                <button class="btn btn-outline" id="nodeConfigCancel">Cancel</button>
+                <button class="btn btn-primary" id="nodeConfigSave">Save</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Agent View -->
+        <section class="view-panel" id="view-agent">
+          <div class="agent-layout">
+            <div class="agent-config">
+              <h3>AI Agent Configuration</h3>
+              <div class="form-group">
+                <label>Agent Name</label>
+                <input type="text" id="agentName" placeholder="My AI Agent" />
+              </div>
+              <div class="form-group">
+                <label>System Prompt</label>
+                <textarea id="agentSystemPrompt" rows="4" placeholder="You are a helpful automation assistant..."></textarea>
+              </div>
+              <div class="form-group">
+                <label>Model</label>
+                <select id="agentModel">
+                  <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                  <option value="gemini-2.0-pro">Gemini 2.0 Pro</option>
+                  <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                  <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Temperature</label>
+                <input type="range" id="agentTemperature" min="0" max="1" step="0.1" value="0.7" />
+                <span class="range-value" id="tempValue">0.7</span>
+              </div>
+              <div class="form-group">
+                <label>Max Tokens</label>
+                <input type="number" id="agentMaxTokens" value="2048" min="1" max="8192" />
+              </div>
+              <div class="form-group">
+                <label>Google Gemini API Key</label>
+                <div class="input-with-btn">
+                  <input type="password" id="geminiApiKey" placeholder="AIzaSy..." />
+                  <button class="btn btn-sm" id="toggleApiKey">👁️</button>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-full" id="saveAgentConfig">Save Configuration</button>
+              <div class="agent-tools">
+                <h4>Enabled Tools</h4>
+                <label class="checkbox-item"><input type="checkbox" checked /> Web Search</label>
+                <label class="checkbox-item"><input type="checkbox" checked /> Execute HTTP Requests</label>
+                <label class="checkbox-item"><input type="checkbox" checked /> Send Emails (Gmail)</label>
+                <label class="checkbox-item"><input type="checkbox" /> Read Google Sheets</label>
+                <label class="checkbox-item"><input type="checkbox" /> Send Telegram Messages</label>
+                <label class="checkbox-item"><input type="checkbox" /> Send WhatsApp Messages</label>
+              </div>
+            </div>
+            <div class="agent-preview">
+              <h3>Test Your Agent</h3>
+              <div class="agent-chat-window" id="agentChatWindow">
+                <div class="agent-chat-messages" id="agentChatMessages">
+                  <div class="agent-message system">👋 Hello! I'm your AI Agent. Configure me on the left and start chatting!</div>
+                </div>
+                <div class="agent-chat-input">
+                  <input type="text" id="agentChatInput" placeholder="Ask your agent anything..." />
+                  <button class="btn btn-primary" id="agentChatSend">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Chat View -->
+        <section class="view-panel" id="view-chat">
+          <div class="chat-layout">
+            <div class="chat-sidebar">
+              <h4>Conversations</h4>
+              <button class="btn btn-primary btn-full btn-sm" id="newChatBtn">+ New Chat</button>
+              <div class="chat-list" id="chatList"></div>
+            </div>
+            <div class="chat-main">
+              <div class="chat-messages" id="chatMessages">
+                <div class="chat-welcome">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="1.5"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"/></svg>
+                  <h3>AI Chat</h3>
+                  <p>Powered by Google Gemini API. Start a conversation!</p>
+                </div>
+              </div>
+              <div class="chat-input-area">
+                <textarea id="chatInput" rows="1" placeholder="Type a message..."></textarea>
+                <button class="btn btn-primary" id="chatSendBtn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- History View -->
+        <section class="view-panel" id="view-history">
+          <div class="view-header">
+            <h3>Workflow Run History</h3>
+            <div class="history-filters">
+              <select id="historyStatusFilter">
+                <option value="all">All Status</option>
+                <option value="success">Success</option>
+                <option value="failed">Failed</option>
+                <option value="running">Running</option>
+              </select>
+              <button class="btn btn-sm btn-outline" id="clearHistoryBtn">Clear History</button>
+            </div>
+          </div>
+          <div class="history-table-wrapper">
+            <table class="history-table">
+              <thead>
+                <tr><th>Workflow</th><th>Status</th><th>Started</th><th>Duration</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="historyTableBody"></tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="emptyHistory">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <h4>No Run History</h4>
+            <p>Run your workflows to see execution history here.</p>
+          </div>
+        </section>
+
+        <!-- Integrations View -->
+        <section class="view-panel" id="view-integrations">
+          <div class="view-header"><h3>Integrations</h3></div>
+          <div class="integrations-grid" id="integrationsGrid">
+            <!-- Generated by JS -->
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Import Modal -->
+  <div class="modal-overlay" id="importModal">
+    <div class="modal-card">
+      <div class="modal-header"><h3>Import Workflow</h3><button class="btn-icon modal-close" id="importModalClose">✕</button></div>
+      <div class="modal-body">
+        <textarea id="importJson" rows="10" placeholder='Paste workflow JSON here...'></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="importCancel">Cancel</button>
+        <button class="btn btn-primary" id="importConfirm">Import</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+/**
+ * AI Flow — LocalStorage Persistence Layer
+ * Handles all data storage for workflows, users, history, chat, and agent config.
+ */
+
+const Storage = {
+  /**
+   * Get all registered users
+   */
+  getUsers() {
+    try {
+      return JSON.parse(localStorage.getItem('aiflow_users') || '[]');
+    } catch { return []; }
+  },
+
+  /**
+   * Save users array
+   */
+  saveUsers(users) {
+    localStorage.setItem('aiflow_users', JSON.stringify(users));
+  },
+
+  /**
+   * Find user by email
+   */
+  findUser(email) {
+    return this.getUsers().find(u => u.email === email);
+  },
+
+  /**
+   * Add a new user
+   */
+  addUser(name, email, password) {
+    const users = this.getUsers();
+    const user = {
+      id: 'user_' + Date.now(),
+      name,
+      email,
+      password,
+      createdAt: new Date().toISOString()
+    };
+    users.push(user);
+    this.saveUsers(users);
+    return user;
+  },
+
+  /**
+   * Get current session
+   */
+  getSession() {
+    try {
+      return JSON.parse(localStorage.getItem('aiflow_session') || 'null');
+    } catch { return null; }
+  },
+
+  /**
+   * Save session
+   */
+  saveSession(user) {
+    const session = {
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+      loginAt: new Date().toISOString()
+    };
+    localStorage.setItem('aiflow_session', JSON.stringify(session));
+    return session;
+  },
+
+  /**
+   * Clear session
+   */
+  clearSession() {
+    localStorage.removeItem('aiflow_session');
+  },
+
+  /**
+   * Get user-specific key
+   */
+  userKey(key) {
+    const session = this.getSession();
+    const uid = session ? session.userId : 'anonymous';
+    return `aiflow_${uid}_${key}`;
+  },
+
+  /**
+   * Get workflows for current user
+   */
+  getWorkflows() {
+    try {
+      return JSON.parse(localStorage.getItem(this.userKey('workflows')) || '[]');
+    } catch { return []; }
+  },
+
+  /**
+   * Save workflows for current user
+   */
+  saveWorkflows(workflows) {
+    localStorage.setItem(this.userKey('workflows'), JSON.stringify(workflows));
+  },
+
+  /**
+   * Get a single workflow
+   */
+  getWorkflow(id) {
+    return this.getWorkflows().find(w => w.id === id);
+  },
+
+  /**
+   * Save or update a workflow
+   */
+  saveWorkflow(workflow) {
+    const workflows = this.getWorkflows();
+    const idx = workflows.findIndex(w => w.id === workflow.id);
+    if (idx >= 0) {
+      workflows[idx] = { ...workflows[idx], ...workflow, updatedAt: new Date().toISOString() };
+    } else {
+      workflows.push({
+        ...workflow,
+        id: workflow.id || 'wf_' + Date.now(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+    }
+    this.saveWorkflows(workflows);
+    return workflow;
+  },
+
+  /**
+   * Delete a workflow
+   */
+  deleteWorkflow(id) {
+    const workflows = this.getWorkflows().filter(w => w.id !== id);
+    this.saveWorkflows(workflows);
+  },
+
+  /**
+   * Get run history
+   */
+  getHistory() {
+    try {
+      return JSON.parse(localStorage.getItem(this.userKey('history')) || '[]');
+    } catch { return []; }
+  },
+
+  /**
+   * Add a history entry
+   */
+  addHistory(entry) {
+    const history = this.getHistory();
+    history.unshift({
+      id: 'run_' + Date.now(),
+      ...entry,
+      timestamp: new Date().toISOString()
+    });
+    // Keep last 200 entries
+    if (history.length > 200) history.splice(200);
+    localStorage.setItem(this.userKey('history'), JSON.stringify(history));
+  },
+
+  /**
+   * Clear history
+   */
+  clearHistory() {
+    localStorage.setItem(this.userKey('history'), '[]');
+  },
+
+  /**
+   * Get chat conversations
+   */
+  getChats() {
+    try {
+      return JSON.parse(localStorage.getItem(this.userKey('chats')) || '[]');
+    } catch { return []; }
+  },
+
+  /**
+   * Save chat conversations
+   */
+  saveChats(chats) {
+    localStorage.setItem(this.userKey('chats'), JSON.stringify(chats));
+  },
+
+  /**
+   * Get agent configuration
+   */
+  getAgentConfig() {
+    try {
+      return JSON.parse(localStorage.getItem(this.userKey('agentConfig')) || 'null');
+    } catch { return null; }
+  },
+
+  /**
+   * Save agent configuration
+   */
+  saveAgentConfig(config) {
+    localStorage.setItem(this.userKey('agentConfig'), JSON.stringify(config));
+  },
+
+  /**
+   * Get integrations state
+   */
+  getIntegrations() {
+    try {
+      return JSON.parse(localStorage.getItem(this.userKey('integrations')) || '{}');
+    } catch { return {}; }
+  },
+
+  /**
+   * Save integration state
+   */
+  saveIntegration(key, value) {
+    const integrations = this.getIntegrations();
+    integrations[key] = value;
+    localStorage.setItem(this.userKey('integrations'), JSON.stringify(integrations));
+  },
+
+  /**
+   * Get theme preference
+   */
+  getTheme() {
+    return localStorage.getItem('aiflow_theme') || 'light';
+  },
+
+  /**
+   * Save theme preference
+   */
+  saveTheme(theme) {
+    localStorage.setItem('aiflow_theme', theme);
+  },
+
+  /**
+   * Get active workflow ID in builder
+   */
+  getActiveWorkflowId() {
+    return localStorage.getItem(this.userKey('activeWorkflowId'));
+  },
+
+  /**
+   * Set active workflow ID in builder
+   */
+  setActiveWorkflowId(id) {
+    localStorage.setItem(this.userKey('activeWorkflowId'), id || '');
+  }
+};
+
+/**
+ * AI Flow — Toast Notification Module
+ * Lightweight toast notification system.
+ */
+
+const Toast = {
+  container: null,
+
+  init() {
+    this.container = document.getElementById('toastContainer');
+  },
+
+  /**
+   * Show a toast notification
+   * @param {string} message - The notification text
+   * @param {'success'|'error'|'info'|'warning'} type - Notification type
+   * @param {number} duration - Duration in ms (default 3500)
+   */
+  show(message, type = 'info', duration = 3500) {
+    if (!this.container) this.init();
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    this.container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add('exiting');
+      toast.addEventListener('animationend', () => toast.remove());
+    }, duration);
+  }
+};
+
+/**
+ * AI Flow — Authentication Module
+ * Handles login, registration, session management, and auth UI.
+ */
+
+const Auth = {
+  init() {
+    this.overlay = document.getElementById('authOverlay');
+    this.card = document.getElementById('authCard');
+    this.loginForm = document.getElementById('loginForm');
+    this.registerForm = document.getElementById('registerForm');
+    this.loginError = document.getElementById('loginError');
+    this.regError = document.getElementById('regError');
+    this.tabs = document.querySelectorAll('.auth-tab');
+    this.logoutBtn = document.getElementById('logoutBtn');
+
+    this.bindTabEvents();
+    this.bindFormEvents();
+
+    // Check initial session
+    const session = Storage.getSession();
+    if (session) {
+      this.showApp();
+    }
+  },
+
+  bindTabEvents() {
+    this.tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        this.tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const target = tab.dataset.tab;
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        if (target === 'login') {
+          this.loginForm.classList.add('active');
+        } else {
+          this.registerForm.classList.add('active');
+        }
+        this.loginError.textContent = '';
+        this.regError.textContent = '';
+      });
+    });
+  },
+
+  bindFormEvents() {
+    // Login
+    this.loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPass').value.trim();
+      const user = Storage.findUser(email);
+
+      if (!user) {
+        this.loginError.textContent = 'No account found with that email.';
+        return;
+      }
+      if (user.password !== pass) {
+        this.loginError.textContent = 'Incorrect password.';
+        return;
+      }
+
+      Storage.saveSession(user);
+      this.showApp();
+      Toast.show('Welcome back, ' + user.name + '!', 'success');
+    });
+
+    // Register
+    this.registerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const pass = document.getElementById('regPass').value.trim();
+
+      if (!name || !email || !pass) {
+        this.regError.textContent = 'All fields are required.';
+        return;
+      }
+      if (pass.length < 6) {
+        this.regError.textContent = 'Password must be at least 6 characters.';
+        return;
+      }
+      if (Storage.findUser(email)) {
+        this.regError.textContent = 'An account with this email already exists.';
+        return;
+      }
+
+      const user = Storage.addUser(name, email, pass);
+      Storage.saveSession(user);
+      this.showApp();
+      Toast.show('Account created! Welcome, ' + user.name + '!', 'success');
+    });
+
+    // Logout
+    this.logoutBtn.addEventListener('click', () => {
+      Storage.clearSession();
+      this.hideApp();
+      Toast.show('Signed out successfully.', 'info');
+    });
+  },
+
+  showApp() {
+    this.overlay.classList.add('hidden');
+    document.getElementById('appContainer').classList.add('visible');
+    document.getElementById('userBadge').textContent = Storage.getSession()?.name || '';
+  },
+
+  hideApp() {
+    this.overlay.classList.remove('hidden');
+    document.getElementById('appContainer').classList.remove('visible');
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('regName').value = '';
+    document.getElementById('regEmail').value = '';
+    document.getElementById('regPass').value = '';
+    this.loginError.textContent = '';
+    this.regError.textContent = '';
+  },
+
+  isAuthenticated() {
+    return Storage.getSession() !== null;
+  }
+};
+
+/**
+ * AI Flow — Workflows Module
+ * Manages the workflows list view: CRUD operations, card rendering, and navigation to builder.
+ */
+
+const Workflows = {
+  init() {
+    this.grid = document.getElementById('workflowGrid');
+    this.emptyState = document.getElementById('emptyWorkflows');
+    this.createBtns = [
+      document.getElementById('createWorkflowBtn'),
+      document.getElementById('createWorkflowBtn2')
+    ];
+
+    this.bindEvents();
+    this.render();
+  },
+
+  bindEvents() {
+    this.createBtns.forEach(btn => {
+      if (btn) {
+        btn.addEventListener('click', () => this.createWorkflow());
+      }
+    });
+  },
+
+  /**
+   * Get all workflows and render them
+   */
+  render() {
+    const workflows = Storage.getWorkflows();
+    this.grid.innerHTML = '';
+
+    if (workflows.length === 0) {
+      this.emptyState.style.display = 'flex';
+      this.grid.style.display = 'none';
+      return;
+    }
+
+    this.emptyState.style.display = 'none';
+    this.grid.style.display = 'grid';
+
+    workflows.forEach(wf => {
+      const card = this.createCard(wf);
+      this.grid.appendChild(card);
+    });
+  },
+
+  /**
+   * Create a workflow card element
+   */
+  createCard(wf) {
+    const card = document.createElement('div');
+    card.className = 'workflow-card';
+
+    const nodeCount = wf.nodes ? wf.nodes.length : 0;
+    const status = wf.status || 'draft';
+
+    card.innerHTML = `
+      <div class="workflow-card-header">
+        <span class="workflow-card-title">${this.escape(wf.name || 'Untitled')}</span>
+        <span class="workflow-card-status ${status}"></span>
+      </div>
+      <div class="workflow-card-desc">${nodeCount} node${nodeCount !== 1 ? 's' : ''} • Status: ${status}</div>
+      <div class="workflow-card-meta">
+        <span>Updated: ${this.formatDate(wf.updatedAt)}</span>
+      </div>
+      <div class="workflow-card-actions">
+        <button class="btn btn-sm btn-primary edit-wf" data-id="${wf.id}">Edit</button>
+        <button class="btn btn-sm btn-success run-wf" data-id="${wf.id}">Run</button>
+        <button class="btn btn-sm btn-outline delete-wf" data-id="${wf.id}">Delete</button>
+      </div>
+    `;
+
+    // Click on card (not on buttons) to open builder
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('button')) return;
+      this.openBuilder(wf.id);
+    });
+
+    // Edit button
+    card.querySelector('.edit-wf').addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.openBuilder(wf.id);
+    });
+
+    // Run button
+    card.querySelector('.run-wf').addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.runWorkflow(wf.id);
+    });
+
+    // Delete button
+    card.querySelector('.delete-wf').addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.deleteWorkflow(wf.id);
+    });
+
+    return card;
+  },
+
+  /**
+   * Create a new workflow and open it in the builder
+   */
+  createWorkflow() {
+    const workflow = {
+      id: 'wf_' + Date.now(),
+      name: 'New Workflow',
+      status: 'draft',
+      nodes: [],
+      connections: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    Storage.saveWorkflow(workflow);
+    this.openBuilder(workflow.id);
+    Toast.show('Workflow created!', 'success');
+  },
+
+  /**
+   * Open a workflow in the builder
+   */
+  openBuilder(workflowId) {
+    Storage.setActiveWorkflowId(workflowId);
+    App.navigate('builder');
+    App.loadBuilder(workflowId);
+  },
+
+  /**
+   * Delete a workflow after confirmation
+   */
+  deleteWorkflow(id) {
+    const wf = Storage.getWorkflow(id);
+    if (!wf) return;
+    if (confirm(`Delete "${wf.name || 'Untitled'}"? This cannot be undone.`)) {
+      Storage.deleteWorkflow(id);
+      this.render();
+      // If active workflow was deleted, clear builder
+      if (Storage.getActiveWorkflowId() === id) {
+        Storage.setActiveWorkflowId(null);
+      }
+      Toast.show('Workflow deleted.', 'info');
+    }
+  },
+
+  /**
+   * Run a workflow (simulation)
+   */
+  async runWorkflow(id) {
+    const wf = Storage.getWorkflow(id);
+    if (!wf || !wf.nodes || wf.nodes.length === 0) {
+      Toast.show('Workflow has no nodes to execute.', 'warning');
+      return;
+    }
+
+    Toast.show('Executing workflow...', 'info');
+    Storage.addHistory({
+      workflowId: id,
+      workflowName: wf.name,
+      status: 'running',
+      startedAt: new Date().toISOString()
+    });
+
+    // Simulate execution delay
+    await new Promise(r => setTimeout(r, 1500));
+
+    // Simulate AI node execution if present
+    const hasAINode = wf.nodes.some(n => n.type === 'ai-agent' || n.type === 'ai-chat');
+    let result = 'success';
+
+    if (hasAINode) {
+      try {
+        const config = Storage.getAgentConfig();
+        if (config?.apiKey) {
+          await GeminiAPI.generate('Execute the following workflow step with your capabilities.', 'gemini-2.0-flash', 0.7);
+        }
+      } catch {
+        result = 'failed';
+      }
+    }
+
+    Storage.addHistory({
+      workflowId: id,
+      workflowName: wf.name,
+      status: result,
+      duration: Math.floor(Math.random() * 3000) + 500,
+      completedAt: new Date().toISOString()
+    });
+
+    Toast.show(`Workflow execution ${result === 'success' ? 'completed' : 'failed'}!`, result === 'success' ? 'success' : 'error');
+    History.render();
+  },
+
+  escape(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  },
+
+  formatDate(dateStr) {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+};
+
+/**
+ * AI Flow — Workflow Builder Module
+ * Drag-and-drop node-based workflow builder with canvas, connections, and node configuration.
+ */
+
+const Builder = {
+  workflow: null,
+  nodes: [],
+  connections: [],
+  selectedNodeId: null,
+  isDragging: false,
+  isConnecting: false,
+  connectFromNodeId: null,
+  connectFromPort: null,
+  dragNode: null,
+  dragOffsetX: 0,
+  dragOffsetY: 0,
+  canvasScale: 1,
+
+  init() {
+    this.canvas = document.getElementById('flowCanvas');
+    this.connectionsLayer = document.getElementById('connectionsLayer');
+    this.dropZone = document.getElementById('canvasDropZone');
+    this.nameInput = document.getElementById('workflowNameInput');
+    this.nodeConfigModal = document.getElementById('nodeConfigModal');
+    this.nodeConfigTitle = document.getElementById('nodeConfigTitle');
+    this.nodeConfigBody = document.getElementById('nodeConfigBody');
+    this.palette = document.getElementById('nodePalette');
+
+    this.bindPaletteEvents();
+    this.bindCanvasEvents();
+    this.bindToolbarEvents();
+    this.bindModalEvents();
+  },
+
+  /**
+   * Load a workflow into the builder
+   */
+  loadWorkflow(workflowId) {
+    const wf = Storage.getWorkflow(workflowId);
+    if (!wf) {
+      this.clearCanvas();
+      this.workflow = null;
+      return;
+    }
+
+    this.workflow = wf;
+    this.nodes = wf.nodes || [];
+    this.connections = wf.connections || [];
+    this.nameInput.value = wf.name || '';
+    this.renderCanvas();
+  },
+
+  /**
+   * Clear the canvas
+   */
+  clearCanvas() {
+    this.nodes = [];
+    this.connections = [];
+    this.selectedNodeId = null;
+    this.nameInput.value = '';
+    this.clearAllNodeElements();
+    this.drawConnections();
+    this.dropZone.classList.remove('hidden');
+    Storage.setActiveWorkflowId(null);
+  },
+
+  /**
+   * Render all nodes on the canvas
+   */
+  renderCanvas() {
+    this.clearAllNodeElements();
+    if (this.nodes.length === 0) {
+      this.dropZone.classList.remove('hidden');
+    } else {
+      this.dropZone.classList.add('hidden');
+    }
+
+    this.nodes.forEach(node => {
+      this.createNodeElement(node);
+    });
+    this.drawConnections();
+  },
+
+  /**
+   * Create a DOM element for a node
+   */
+  createNodeElement(node) {
+    const el = document.createElement('div');
+    el.className = 'canvas-node';
+    el.id = 'node-' + node.id;
+    el.style.left = (node.x || 100) + 'px';
+    el.style.top = (node.y || 100) + 'px';
+    el.dataset.nodeId = node.id;
+
+    if (node.id === this.selectedNodeId) {
+      el.classList.add('selected');
+    }
+
+    const icon = this.getNodeIcon(node.type);
+    const label = this.getNodeLabel(node.type);
+
+    el.innerHTML = `
+      <div class="node-header">
+        <span class="node-icon" style="background:${icon.color}">${icon.emoji}</span>
+        <span>${label}</span>
+      </div>
+      <div class="node-body">${node.config?.description || this.getDefaultDesc(node.type)}</div>
+      <div class="node-port input" data-port="input" data-node-id="${node.id}"></div>
+      <div class="node-port output" data-port="output" data-node-id="${node.id}"></div>
+    `;
+
+    // Node drag
+    el.addEventListener('mousedown', (e) => this.onNodeMouseDown(e, node));
+
+    // Double-click to configure
+    el.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      this.openNodeConfig(node);
+    });
+
+    // Port connection
+    el.querySelectorAll('.node-port').forEach(port => {
+      port.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+        this.onPortMouseDown(e, node.id, port.dataset.port);
+      });
+    });
+
+    this.canvas.appendChild(el);
+  },
+
+  /**
+   * Remove all node DOM elements from canvas
+   */
+  clearAllNodeElements() {
+    this.canvas.querySelectorAll('.canvas-node').forEach(el => el.remove());
+  },
+
+  /**
+   * Bind drag events for palette items
+   */
+  bindPaletteEvents() {
+    document.querySelectorAll('.palette-node').forEach(item => {
+      item.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('nodeType', item.dataset.nodeType);
+        e.dataTransfer.effectAllowed = 'copy';
+      });
+    });
+  },
+
+  /**
+   * Bind drop and canvas events
+   */
+  bindCanvasEvents() {
+    this.canvas.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+    });
+
+    this.canvas.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const nodeType = e.dataTransfer.getData('nodeType');
+      if (!nodeType) return;
+
+      const rect = this.canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left + this.canvas.scrollLeft - 90;
+      const y = e.clientY - rect.top + this.canvas.scrollTop - 30;
+
+      this.addNode(nodeType, x, y);
+    });
+
+    // Click on canvas to deselect
+    this.canvas.addEventListener('mousedown', (e) => {
+      if (e.target === this.canvas || e.target === this.connectionsLayer || e.target.classList.contains('canvas-drop-zone')) {
+        this.selectedNodeId = null;
+        this.renderCanvas();
+      }
+    });
+
+    // Mouse move for dragging nodes
+    document.addEventListener('mousemove', (e) => this.onMouseMove(e));
+    document.addEventListener('mouseup', (e) => this.onMouseUp(e));
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (App.currentView !== 'builder') return;
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (this.selectedNodeId && document.activeElement === document.body) {
+          this.deleteNode(this.selectedNodeId);
+        }
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        this.saveWorkflow();
+      }
+    });
+  },
+
+  /**
+   * Bind toolbar buttons
+   */
+  bindToolbarEvents() {
+    document.getElementById('saveWorkflowBtn').addEventListener('click', () => this.saveWorkflow());
+    document.getElementById('runWorkflowBtn').addEventListener('click', () => this.executeWorkflow());
+    document.getElementById('exportWorkflowBtn').addEventListener('click', () => this.exportWorkflow());
+    document.getElementById('importWorkflowBtn').addEventListener('click', () => this.showImportModal());
+
+    this.nameInput.addEventListener('input', () => {
+      if (this.workflow) {
+        this.workflow.name = this.nameInput.value;
+      }
+    });
+    this.nameInput.addEventListener('blur', () => this.saveWorkflow(true));
+  },
+
+  /**
+   * Bind node config modal events
+   */
+  bindModalEvents() {
+    document.getElementById('nodeConfigClose').addEventListener('click', () => this.closeModal());
+    document.getElementById('nodeConfigCancel').addEventListener('click', () => this.closeModal());
+    document.getElementById('nodeConfigSave').addEventListener('click', () => this.saveNodeConfig());
+  },
+
+  /**
+   * Add a new node to the canvas
+   */
+  addNode(type, x, y) {
+    if (!this.workflow) {
+      // Auto-create a workflow if none active
+      this.workflow = {
+        id: 'wf_' + Date.now(),
+        name: 'Untitled Workflow',
+        status: 'draft',
+        nodes: [],
+        connections: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      Storage.saveWorkflow(this.workflow);
+      Storage.setActiveWorkflowId(this.workflow.id);
+      this.nameInput.value = this.workflow.name;
+    }
+
+    const node = {
+      id: 'node_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+      type: type,
+      x: Math.max(0, x),
+      y: Math.max(0, y),
+      config: {}
+    };
+
+    this.nodes.push(node);
+    this.dropZone.classList.add('hidden');
+    this.createNodeElement(node);
+    this.saveWorkflow();
+    Toast.show(`Added ${this.getNodeLabel(type)} node`, 'info');
+  },
+
+  /**
+   * Delete a node and its connections
+   */
+  deleteNode(nodeId) {
+    this.nodes = this.nodes.filter(n => n.id !== nodeId);
+    this.connections = this.connections.filter(c => c.from !== nodeId && c.to !== nodeId);
+    this.selectedNodeId = null;
+    this.renderCanvas();
+    this.saveWorkflow();
+    Toast.show('Node deleted.', 'info');
+  },
+
+  /**
+   * Update an existing node
+   */
+  updateNode(nodeId, updates) {
+    const node = this.nodes.find(n => n.id === nodeId);
+    if (node) {
+      Object.assign(node, updates);
+    }
+  },
+
+  /**
+   * Add a connection between two nodes
+   */
+  addConnection(fromNodeId, toNodeId) {
+    // Prevent duplicate
+    if (this.connections.some(c => c.from === fromNodeId && c.to === toNodeId)) return;
+    // Prevent self-connection
+    if (fromNodeId === toNodeId) return;
+
+    this.connections.push({
+      id: 'conn_' + Date.now(),
+      from: fromNodeId,
+      to: toNodeId
+    });
+    this.drawConnections();
+    this.saveWorkflow();
+  },
+
+  /**
+   * Draw all connections on the SVG layer
+   */
+  drawConnections() {
+    const svg = this.connectionsLayer;
+    svg.innerHTML = '';
+
+    this.connections.forEach(conn => {
+      const fromEl = document.getElementById('node-' + conn.from);
+      const toEl = document.getElementById('node-' + conn.to);
+      if (!fromEl || !toEl) return;
+
+      const fromPort = fromEl.querySelector('.node-port.output');
+      const toPort = toEl.querySelector('.node-port.input');
+      if (!fromPort || !toPort) return;
+
+      const canvasRect = this.canvas.getBoundingClientRect();
+      const fromRect = fromPort.getBoundingClientRect();
+      const toRect = toPort.getBoundingClientRect();
+
+      const x1 = fromRect.left + fromRect.width / 2 - canvasRect.left + this.canvas.scrollLeft;
+      const y1 = fromRect.top + fromRect.height / 2 - canvasRect.top + this.canvas.scrollTop;
+      const x2 = toRect.left + toRect.width / 2 - canvasRect.left + this.canvas.scrollLeft;
+      const y2 = toRect.top + toRect.height / 2 - canvasRect.top + this.canvas.scrollTop;
+
+      const dx = Math.abs(x2 - x1) * 0.5;
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', `M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}`);
+      path.classList.add('connection-path');
+      path.dataset.connId = conn.id;
+
+      // Click to delete connection
+      path.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        this.connections = this.connections.filter(c => c.id !== conn.id);
+        this.drawConnections();
+        this.saveWorkflow();
+        Toast.show('Connection removed.', 'info');
+      });
+
+      svg.appendChild(path);
+    });
+  },
+
+  /**
+   * Handle mouse down on a node (begin drag)
+   */
+  onNodeMouseDown(e, node) {
+    if (e.target.classList.contains('node-port')) return;
+    e.stopPropagation();
+    e.preventDefault();
+
+    this.selectedNodeId = node.id;
+    this.isDragging = true;
+    this.dragNode = node;
+
+    const el = document.getElementById('node-' + node.id);
+    const rect = el.getBoundingClientRect();
+    this.dragOffsetX = e.clientX - rect.left;
+    this.dragOffsetY = e.clientY - rect.top;
+
+    this.renderCanvas();
+  },
+
+  /**
+   * Handle mouse down on a port (begin connection)
+   */
+  onPortMouseDown(e, nodeId, portType) {
+    e.stopPropagation();
+    e.preventDefault();
+    this.isConnecting = true;
+    this.connectFromNodeId = nodeId;
+    this.connectFromPort = portType;
+  },
+
+  /**
+   * Handle mouse move globally
+   */
+  onMouseMove(e) {
+    if (this.isDragging && this.dragNode) {
+      const rect = this.canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left + this.canvas.scrollLeft - this.dragOffsetX;
+      const y = e.clientY - rect.top + this.canvas.scrollTop - this.dragOffsetY;
+
+      this.dragNode.x = Math.max(0, x);
+      this.dragNode.y = Math.max(0, y);
+
+      const el = document.getElementById('node-' + this.dragNode.id);
+      if (el) {
+        el.style.left = this.dragNode.x + 'px';
+        el.style.top = this.dragNode.y + 'px';
+      }
+      this.drawConnections();
+    }
+
+    if (this.isConnecting) {
+      this.drawConnections();
+    }
+  },
+
+  /**
+   * Handle mouse up globally (end drag or connection)
+   */
+  onMouseUp(e) {
+    if (this.isDragging) {
+      this.isDragging = false;
+      this.dragNode = null;
+      this.saveWorkflow();
+    }
+
+    if (this.isConnecting) {
+      this.isConnecting = false;
+
+      // Find target node under cursor
+      const targetEl = document.elementFromPoint(e.clientX, e.clientY);
+      const targetNodeEl = targetEl?.closest('.canvas-node');
+      const targetPort = targetEl?.closest('.node-port');
+
+      if (targetNodeEl && targetPort && targetPort.dataset.port === 'input') {
+        const targetNodeId = targetNodeEl.dataset.nodeId;
+        if (this.connectFromPort === 'output') {
+          this.addConnection(this.connectFromNodeId, targetNodeId);
+        }
+      }
+
+      this.connectFromNodeId = null;
+      this.connectFromPort = null;
+      this.drawConnections();
+    }
+  },
+
+  /**
+   * Open node configuration modal
+   */
+  openNodeConfig(node) {
+    this.nodeConfigTitle.textContent = `Configure: ${this.getNodeLabel(node.type)}`;
+    const config = node.config || {};
+    const fields = this.getNodeConfigFields(node.type, config);
+
+    this.nodeConfigBody.innerHTML = `
+      <input type="hidden" id="configNodeId" value="${node.id}" />
+      ${fields}
+    `;
+
+    this.nodeConfigModal.classList.add('active');
+  },
+
+  /**
+   * Get configuration form fields for each node type
+   */
+  getNodeConfigFields(type, config) {
+    const base = '<div class="form-group"><label>Description</label><input type="text" id="cfg_desc" value="' + (config.description || '') + '" placeholder="Brief description" /></div>';
+
+    switch (type) {
+      case 'webhook':
+        return base + `
+          <div class="form-group"><label>Webhook URL (auto-generated)</label><input type="text" value="https://hook.aiflow.io/wh_${Date.now()}" readonly /></div>
+          <div class="form-group"><label>HTTP Method</label><select id="cfg_method"><option ${config.method === 'POST' ? 'selected' : ''}>POST</option><option ${config.method === 'GET' ? 'selected' : ''}>GET</option></select></div>
+          <div class="form-group"><label>Response Template</label><textarea id="cfg_response" rows="3">${config.response || '{"status":"ok"}'}</textarea></div>
+        `;
+
+      case 'schedule':
+        return base + `
+          <div class="form-group"><label>Cron Expression</label><input type="text" id="cfg_cron" value="${config.cron || '0 9 * * *'}" placeholder="0 9 * * *" /></div>
+          <div class="form-group"><label>Timezone</label><select id="cfg_timezone"><option>UTC</option><option>Asia/Shanghai</option><option>America/New_York</option><option>Europe/London</option></select></div>
+        `;
+
+      case 'ai-agent':
+        return base + `
+          <div class="form-group"><label>AI Prompt</label><textarea id="cfg_prompt" rows="4" placeholder="Ask the AI agent...">${config.prompt || ''}</textarea></div>
+          <div class="form-group"><label>Model</label><select id="cfg_model"><option>gemini-2.0-flash</option><option>gemini-2.0-pro</option><option>gemini-1.5-pro</option><option>gemini-1.5-flash</option></select></div>
+          <div class="form-group"><label>Output Variable Name</label><input type="text" id="cfg_output" value="${config.output || 'ai_response'}" /></div>
+        `;
+
+      case 'ai-chat':
+        return base + `
+          <div class="form-group"><label>System Message</label><textarea id="cfg_system" rows="3">${config.system || 'You are a helpful assistant.'}</textarea></div>
+          <div class="form-group"><label>User Message</label><textarea id="cfg_message" rows="3">${config.message || 'Hello! Tell me something interesting.'}</textarea></div>
+          <div class="form-group"><label>Temperature (0-1)</label><input type="number" id="cfg_temp" value="${config.temperature || 0.7}" min="0" max="1" step="0.1" /></div>
+        `;
+
+      case 'gmail':
+        return base + `
+          <div class="form-group"><label>To</label><input type="email" id="cfg_to" value="${config.to || ''}" /></div>
+          <div class="form-group"><label>Subject</label><input type="text" id="cfg_subject" value="${config.subject || ''}" /></div>
+          <div class="form-group"><label>Body</label><textarea id="cfg_body" rows="4">${config.body || ''}</textarea></div>
+        `;
+
+      case 'telegram':
+        return base + `
+          <div class="form-group"><label>Bot Token</label><input type="password" id="cfg_token" value="${config.token || ''}" /></div>
+          <div class="form-group"><label>Chat ID</label><input type="text" id="cfg_chatId" value="${config.chatId || ''}" /></div>
+          <div class="form-group"><label>Message</label><textarea id="cfg_text" rows="3">${config.text || ''}</textarea></div>
+        `;
+
+      case 'whatsapp':
+        return base + `
+          <div class="form-group"><label>Phone Number</label><input type="text" id="cfg_phone" value="${config.phone || ''}" placeholder="+1234567890" /></div>
+          <div class="form-group"><label>Message</label><textarea id="cfg_text" rows="3">${config.text || ''}</textarea></div>
+        `;
+
+      case 'sheets':
+        return base + `
+          <div class="form-group"><label>Spreadsheet ID</label><input type="text" id="cfg_sheetId" value="${config.sheetId || ''}" /></div>
+          <div class="form-group"><label>Range (e.g., Sheet1!A1:D10)</label><input type="text" id="cfg_range" value="${config.range || ''}" /></div>
+          <div class="form-group"><label>Operation</label><select id="cfg_operation"><option>Read</option><option>Append</option><option>Update</option></select></div>
+        `;
+
+      case 'http-request':
+        return base + `
+          <div class="form-group"><label>URL</label><input type="text" id="cfg_url" value="${config.url || ''}" /></div>
+          <div class="form-group"><label>Method</label><select id="cfg_method"><option ${config.method === 'GET' ? 'selected' : ''}>GET</option><option ${config.method === 'POST' ? 'selected' : ''}>POST</option><option ${config.method === 'PUT' ? 'selected' : ''}>PUT</option><option ${config.method === 'DELETE' ? 'selected' : ''}>DELETE</option></select></div>
+          <div class="form-group"><label>Headers (JSON)</label><textarea id="cfg_headers" rows="2">${config.headers || '{}'}</textarea></div>
+          <div class="form-group"><label>Body</label><textarea id="cfg_body" rows="3">${config.body || ''}</textarea></div>
+        `;
+
+      case 'database':
+        return base + `
+          <div class="form-group"><label>Connection String</label><input type="text" id="cfg_connStr" value="${config.connStr || ''}" placeholder="mysql://user:pass@host/db" /></div>
+          <div class="form-group"><label>SQL Query</label><textarea id="cfg_query" rows="4">${config.query || 'SELECT * FROM users'}</textarea></div>
+        `;
+
+      case 'condition':
+        return base + `
+          <div class="form-group"><label>Left Value</label><input type="text" id="cfg_left" value="${config.left || ''}" placeholder="{{variable}}" /></div>
+          <div class="form-group"><label>Operator</label><select id="cfg_operator"><option>equals</option><option>not equals</option><option>contains</option><option>greater than</option><option>less than</option></select></div>
+          <div class="form-group"><label>Right Value</label><input type="text" id="cfg_right" value="${config.right || ''}" /></div>
+        `;
+
+      case 'loop':
+        return base + `
+          <div class="form-group"><label>Iterate Over (JSON array)</label><textarea id="cfg_items" rows="3">${config.items || '[]'}</textarea></div>
+          <div class="form-group"><label>Max Iterations</label><input type="number" id="cfg_maxIter" value="${config.maxIter || 10}" /></div>
+        `;
+
+      default:
+        return base;
+    }
+  },
+
+  /**
+   * Save node configuration from modal
+   */
+  saveNodeConfig() {
+    const nodeId = document.getElementById('configNodeId').value;
+    const node = this.nodes.find(n => n.id === nodeId);
+    if (!node) return;
+
+    // Collect all config fields dynamically
+    const config = {};
+    this.nodeConfigBody.querySelectorAll('input, textarea, select').forEach(field => {
+      if (field.id && field.id.startsWith('cfg_')) {
+        const key = field.id.replace('cfg_', '');
+        config[key] = field.value;
+      }
+    });
+
+    node.config = config;
+    this.closeModal();
+    this.renderCanvas();
+    this.saveWorkflow();
+    Toast.show('Node configuration saved.', 'success');
+  },
+
+  /**
+   * Close the config modal
+   */
+  closeModal() {
+    this.nodeConfigModal.classList.remove('active');
+  },
+
+  /**
+   * Save current state to storage
+   */
+  saveWorkflow(silent = false) {
+    if (!this.workflow) return;
+
+    this.workflow.name = this.nameInput.value || 'Untitled Workflow';
+    this.workflow.nodes = this.nodes;
+    this.workflow.connections = this.connections;
+    this.workflow.updatedAt = new Date().toISOString();
+    Storage.saveWorkflow(this.workflow);
+
+    if (!silent) {
+      Toast.show('Workflow saved.', 'success');
+    }
+  },
+
+  /**
+   * Execute the current workflow
+   */
+  async executeWorkflow() {
+    if (!this.workflow || this.nodes.length === 0) {
+      Toast.show('Add nodes to the workflow first.', 'warning');
+      return;
+    }
+
+    this.saveWorkflow(true);
+
+    // Mark all nodes as running
+    this.canvas.querySelectorAll('.canvas-node').forEach(el => el.classList.add('running'));
+    Toast.show('Executing workflow...', 'info');
+
+    const startTime = Date.now();
+    let status = 'success';
+
+    try {
+      // Process nodes in order (topological sort by connections)
+      const executed = new Set();
+      const queue = [...this.nodes.filter(n =>
+        !this.connections.some(c => c.to === n.id)
+      )];
+
+      while (queue.length > 0) {
+        const node = queue.shift();
+        if (executed.has(node.id)) continue;
+
+        // Simulate node execution
+        const el = document.getElementById('node-' + node.id);
+        if (el) el.classList.add('running');
+
+        await new Promise(r => setTimeout(r, 300 + Math.random() * 500));
+
+        // Execute AI nodes with Gemini API
+        if (node.type === 'ai-agent' || node.type === 'ai-chat') {
+          const config = Storage.getAgentConfig();
+          if (config?.apiKey) {
+            try {
+              const prompt = node.config?.prompt || node.config?.message || 'Hello';
+              const model = node.config?.model || config.model || 'gemini-2.0-flash';
+              const temp = parseFloat(node.config?.temperature || config.temperature || 0.7);
+              await GeminiAPI.generate(prompt, model, temp);
+            } catch (e) {
+              if (el) el.classList.add('error');
+              status = 'failed';
+            }
+          } else {
+            // Fallback: simulate AI response
+            if (el) {
+              // Brief running state then success
+              await new Promise(r => setTimeout(r, 200));
+            }
+          }
+        }
+
+        executed.add(node.id);
+        if (el) {
+          el.classList.remove('running');
+        }
+
+        // Queue downstream nodes
+        this.connections
+          .filter(c => c.from === node.id)
+          .forEach(c => {
+            const next = this.nodes.find(n => n.id === c.to);
+            if (next && !executed.has(next.id)) {
+              queue.push(next);
+            }
+          });
+      }
+
+      const duration = Date.now() - startTime;
+
+      Storage.addHistory({
+        workflowId: this.workflow.id,
+        workflowName: this.workflow.name,
+        status: status,
+        duration,
+        startedAt: new Date(startTime).toISOString(),
+        completedAt: new Date().toISOString()
+      });
+
+      Toast.show(
+        status === 'success' ? `Workflow completed in ${duration}ms` : 'Workflow completed with errors',
+        status === 'success' ? 'success' : 'error'
+      );
+    } catch (e) {
+      status = 'failed';
+      Storage.addHistory({
+        workflowId: this.workflow.id,
+        workflowName: this.workflow.name,
+        status: 'failed',
+        startedAt: new Date(startTime).toISOString(),
+        completedAt: new Date().toISOString()
+      });
+      Toast.show('Workflow execution failed: ' + e.message, 'error');
+    }
+
+    // Clean up
+    this.canvas.querySelectorAll('.canvas-node').forEach(el => {
+      el.classList.remove('running', 'error');
+    });
+
+    History.render();
+  },
+
+  /**
+   * Export workflow as JSON
+   */
+  exportWorkflow() {
+    if (!this.workflow) {
+      Toast.show('No workflow to export.', 'warning');
+      return;
+    }
+    this.saveWorkflow(true);
+    const json = JSON.stringify(this.workflow, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (this.workflow.name || 'workflow').replace(/\s+/g, '_') + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    Toast.show('Workflow exported!', 'success');
+  },
+
+  /**
+   * Show import modal
+   */
+  showImportModal() {
+    const modal = document.getElementById('importModal');
+    modal.classList.add('active');
+
+    document.getElementById('importModalClose').onclick = () => modal.classList.remove('active');
+    document.getElementById('importCancel').onclick = () => modal.classList.remove('active');
+    document.getElementById('importConfirm').onclick = () => {
+      const json = document.getElementById('importJson').value.trim();
+      try {
+        const imported = JSON.parse(json);
+        if (!imported.nodes) throw new Error('Invalid workflow format');
+        imported.id = 'wf_' + Date.now();
+        imported.createdAt = new Date().toISOString();
+        imported.updatedAt = new Date().toISOString();
+        Storage.saveWorkflow(imported);
+        modal.classList.remove('active');
+        document.getElementById('importJson').value = '';
+        this.loadWorkflow(imported.id);
+        Workflows.render();
+        Toast.show('Workflow imported!', 'success');
+      } catch (e) {
+        Toast.show('Invalid JSON: ' + e.message, 'error');
+      }
+    };
+  },
+
+  /**
+   * Get node icon info
+   */
+  getNodeIcon(type) {
+    const map = {
+      'webhook': { emoji: '⚡', color: '#8B5CF6' },
+      'schedule': { emoji: '🕐', color: '#F59E0B' },
+      'ai-agent': { emoji: '🧠', color: '#6366F1' },
+      'ai-chat': { emoji: '💬', color: '#EC4899' },
+      'gmail': { emoji: '📧', color: '#EA4335' },
+      'telegram': { emoji: '📨', color: '#26A5E4' },
+      'whatsapp': { emoji: '💚', color: '#25D366' },
+      'sheets': { emoji: '📊', color: '#34A853' },
+      'http-request': { emoji: '🌐', color: '#06B6D4' },
+      'database': { emoji: '🗄️', color: '#78716C' },
+      'condition': { emoji: '🔀', color: '#F97316' },
+      'loop': { emoji: '🔁', color: '#14B8A6' }
+    };
+    return map[type] || { emoji: '📦', color: '#94A3B8' };
+  },
+
+  /**
+   * Get human-readable node label
+   */
+  getNodeLabel(type) {
+    const map = {
+      'webhook': 'Webhook',
+      'schedule': 'Schedule',
+      'ai-agent': 'AI Agent',
+      'ai-chat': 'AI Chat',
+      'gmail': 'Gmail',
+      'telegram': 'Telegram',
+      'whatsapp': 'WhatsApp',
+      'sheets': 'Google Sheets',
+      'http-request': 'HTTP Request',
+      'database': 'Database',
+      'condition': 'Condition',
+      'loop': 'Loop'
+    };
+    return map[type] || type;
+  },
+
+  /**
+   * Get default description for a node type
+   */
+  getDefaultDesc(type) {
+    const map = {
+      'webhook': 'Receive HTTP requests',
+      'schedule': 'Run on a schedule',
+      'ai-agent': 'AI-powered automation',
+      'ai-chat': 'AI conversation node',
+      'gmail': 'Send email via Gmail',
+      'telegram': 'Send Telegram messages',
+      'whatsapp': 'Send WhatsApp messages',
+      'sheets': 'Read/write Google Sheets',
+      'http-request': 'Make HTTP API calls',
+      'database': 'Query databases',
+      'condition': 'Branch by condition',
+      'loop': 'Loop over items'
+    };
+    return map[type] || 'Configure this node';
+  }
+};
+
+/**
+ * AI Flow — AI Agent Module
+ * Manages the agent configuration and test chat interface.
+ */
+
+const Agent = {
+  init() {
+    this.loadConfig();
+    this.bindEvents();
+  },
+
+  /**
+   * Load saved agent configuration
+   */
+  loadConfig() {
+    const config = Storage.getAgentConfig();
+    if (config) {
+      document.getElementById('agentName').value = config.name || '';
+      document.getElementById('agentSystemPrompt').value = config.systemPrompt || '';
+      document.getElementById('agentModel').value = config.model || 'gemini-2.0-flash';
+      document.getElementById('agentTemperature').value = config.temperature || 0.7;
+      document.getElementById('tempValue').textContent = config.temperature || 0.7;
+      document.getElementById('agentMaxTokens').value = config.maxTokens || 2048;
+      document.getElementById('geminiApiKey').value = config.apiKey || '';
+    }
+  },
+
+  /**
+   * Bind agent view events
+   */
+  bindEvents() {
+    // Temperature slider
+    const tempSlider = document.getElementById('agentTemperature');
+    const tempValue = document.getElementById('tempValue');
+    tempSlider.addEventListener('input', () => {
+      tempValue.textContent = tempSlider.value;
+    });
+
+    // Toggle API key visibility
+    const apiKeyInput = document.getElementById('geminiApiKey');
+    const toggleBtn = document.getElementById('toggleApiKey');
+    toggleBtn.addEventListener('click', () => {
+      apiKeyInput.type = apiKeyInput.type === 'password' ? 'text' : 'password';
+      toggleBtn.textContent = apiKeyInput.type === 'password' ? '👁️' : '🙈';
+    });
+
+    // Save config
+    document.getElementById('saveAgentConfig').addEventListener('click', () => this.saveConfig());
+
+    // Chat send
+    document.getElementById('agentChatSend').addEventListener('click', () => this.sendAgentMessage());
+    document.getElementById('agentChatInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') this.sendAgentMessage();
+    });
+  },
+
+  /**
+   * Save agent configuration
+   */
+  saveConfig() {
+    const config = {
+      name: document.getElementById('agentName').value.trim(),
+      systemPrompt: document.getElementById('agentSystemPrompt').value.trim(),
+      model: document.getElementById('agentModel').value,
+      temperature: parseFloat(document.getElementById('agentTemperature').value),
+      maxTokens: parseInt(document.getElementById('agentMaxTokens').value),
+      apiKey: document.getElementById('geminiApiKey').value.trim()
+    };
+
+    Storage.saveAgentConfig(config);
+    Toast.show('Agent configuration saved!', 'success');
+  },
+
+  /**
+   * Send a message to the AI agent
+   */
+  async sendAgentMessage() {
+    const input = document.getElementById('agentChatInput');
+    const message = input.value.trim();
+    if (!message) return;
+
+    const config = Storage.getAgentConfig();
+    if (!config?.apiKey) {
+      Toast.show('Please configure your Gemini API key first.', 'warning');
+      return;
+    }
+
+    const messagesContainer = document.getElementById('agentChatMessages');
+
+    // Add user message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'agent-message user';
+    userMsg.textContent = message;
+    messagesContainer.appendChild(userMsg);
+    input.value = '';
+
+    // Add loading indicator
+    const loadingMsg = document.createElement('div');
+    loadingMsg.className = 'agent-message bot';
+    loadingMsg.textContent = '⏳ Thinking...';
+    loadingMsg.id = 'agentLoadingMsg';
+    messagesContainer.appendChild(loadingMsg);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    try {
+      const systemPrompt = config.systemPrompt || 'You are a helpful AI automation assistant.';
+      const fullPrompt = `${systemPrompt}\n\nUser: ${message}`;
+      const response = await GeminiAPI.generate(
+        fullPrompt,
+        config.model || 'gemini-2.0-flash',
+        config.temperature || 0.7,
+        config.maxTokens || 2048
+      );
+
+      // Remove loading
+      loadingMsg.remove();
+
+      // Add bot response
+      const botMsg = document.createElement('div');
+      botMsg.className = 'agent-message bot';
+      botMsg.textContent = response;
+      messagesContainer.appendChild(botMsg);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    } catch (e) {
+      loadingMsg.textContent = '❌ Error: ' + e.message;
+      loadingMsg.style.color = 'var(--error)';
+    }
+  }
+};
+
+/**
+ * AI Flow — AI Chat Module
+ * Manages multi-conversation AI-powered chat with Gemini API.
+ */
+
+const Chat = {
+  conversations: [],
+  activeChatId: null,
+
+  init() {
+    this.loadConversations();
+    this.bindEvents();
+  },
+
+  /**
+   * Load saved conversations
+   */
+  loadConversations() {
+    this.conversations = Storage.getChats();
+    this.renderChatList();
+    if (this.conversations.length > 0) {
+      this.openChat(this.conversations[0].id);
+    }
+  },
+
+  /**
+   * Save conversations to storage
+   */
+  saveConversations() {
+    Storage.saveChats(this.conversations);
+  },
+
+  /**
+   * Bind chat view events
+   */
+  bindEvents() {
+    document.getElementById('newChatBtn').addEventListener('click', () => this.createChat());
+    document.getElementById('chatSendBtn').addEventListener('click', () => this.sendMessage());
+    document.getElementById('chatInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        this.sendMessage();
+      }
+    });
+
+    // Auto-resize textarea
+    const chatInput = document.getElementById('chatInput');
+    chatInput.addEventListener('input', () => {
+      chatInput.style.height = 'auto';
+      chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+    });
+  },
+
+  /**
+   * Create a new conversation
+   */
+  createChat() {
+    const chat = {
+      id: 'chat_' + Date.now(),
+      title: 'New Chat',
+      messages: [],
+      createdAt: new Date().toISOString()
+    };
+    this.conversations.unshift(chat);
+    this.saveConversations();
+    this.renderChatList();
+    this.openChat(chat.id);
+  },
+
+  /**
+   * Open a specific chat
+   */
+  openChat(chatId) {
+    this.activeChatId = chatId;
+    this.renderChatList();
+    this.renderMessages();
+  },
+
+  /**
+   * Delete a conversation
+   */
+  deleteChat(chatId) {
+    this.conversations = this.conversations.filter(c => c.id !== chatId);
+    this.saveConversations();
+    if (this.activeChatId === chatId) {
+      this.activeChatId = this.conversations.length > 0 ? this.conversations[0].id : null;
+    }
+    this.renderChatList();
+    this.renderMessages();
+    Toast.show('Conversation deleted.', 'info');
+  },
+
+  /**
+   * Render the chat list sidebar
+   */
+  renderChatList() {
+    const container = document.getElementById('chatList');
+    container.innerHTML = '';
+
+    if (this.conversations.length === 0) {
+      container.innerHTML = '<p style="font-size:12px;color:var(--text-tertiary);text-align:center;padding:20px;">No conversations yet</p>';
+      return;
+    }
+
+    this.conversations.forEach(chat => {
+      const item = document.createElement('div');
+      item.className = 'chat-list-item' + (chat.id === this.activeChatId ? ' active' : '');
+      item.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${chat.title}</span>
+          <button class="btn-icon delete-chat" data-chat-id="${chat.id}" style="font-size:10px;width:22px;height:22px;flex-shrink:0;">🗑️</button>
+        </div>
+        <div style="font-size:10px;color:var(--text-tertiary);margin-top:2px;">${chat.messages.length} messages</div>
+      `;
+
+      item.addEventListener('click', (e) => {
+        if (e.target.closest('.delete-chat')) return;
+        this.openChat(chat.id);
+      });
+
+      item.querySelector('.delete-chat').addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.deleteChat(chat.id);
+      });
+
+      container.appendChild(item);
+    });
+  },
+
+  /**
+   * Render messages for the active chat
+   */
+  renderMessages() {
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = '';
+
+    const chat = this.conversations.find(c => c.id === this.activeChatId);
+    if (!chat || chat.messages.length === 0) {
+      container.innerHTML = `
+        <div class="chat-welcome">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="1.5"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"/></svg>
+          <h3>AI Chat</h3>
+          <p>Powered by Google Gemini API. Start a conversation!</p>
+        </div>
+      `;
+      return;
+    }
+
+    chat.messages.forEach(msg => {
+      const div = document.createElement('div');
+      div.className = 'chat-message ' + msg.role;
+      div.textContent = msg.content;
+      container.appendChild(div);
+    });
+    container.scrollTop = container.scrollHeight;
+  },
+
+  /**
+   * Send a message in the current chat
+   */
+  async sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    if (!message) return;
+
+    const config = Storage.getAgentConfig();
+    if (!config?.apiKey) {
+      Toast.show('Please configure your Gemini API key in AI Agent settings.', 'warning');
+      return;
+    }
+
+    // Auto-create a chat if none active
+    if (!this.activeChatId) {
+      this.createChat();
+    }
+
+    const chat = this.conversations.find(c => c.id === this.activeChatId);
+    if (!chat) return;
+
+    // Update chat title based on first message
+    if (chat.messages.length === 0) {
+      chat.title = message.slice(0, 40) + (message.length > 40 ? '...' : '');
+    }
+
+    // Add user message
+    chat.messages.push({ role: 'user', content: message });
+    input.value = '';
+    input.style.height = 'auto';
+    this.renderMessages();
+    this.renderChatList();
+    this.saveConversations();
+
+    // Add loading placeholder
+    chat.messages.push({ role: 'bot', content: '⏳ Thinking...' });
+    this.renderMessages();
+
+    try {
+      // Build conversation history for context
+      const history = chat.messages
+        .filter(m => m.role !== 'bot' || !m.content.includes('⏳'))
+        .slice(0, -1)
+        .map(m => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`)
+        .join('\n');
+
+      const prompt = history
+        ? `Previous conversation:\n${history}\n\nUser: ${message}\nAssistant:`
+        : message;
+
+      const response = await GeminiAPI.generate(
+        prompt,
+        config.model || 'gemini-2.0-flash',
+        config.temperature || 0.7,
+        config.maxTokens || 2048
+      );
+
+      // Replace loading with response
+      chat.messages[chat.messages.length - 1] = { role: 'bot', content: response };
+      this.renderMessages();
+      this.saveConversations();
+    } catch (e) {
+      chat.messages[chat.messages.length - 1] = {
+        role: 'bot',
+        content: '❌ Error: ' + e.message
+      };
+      this.renderMessages();
+      this.saveConversations();
+    }
+  }
+};
+
+/**
+ * AI Flow — History Module
+ * Manages workflow execution history display.
+ */
+
+const History = {
+  init() {
+    this.bindEvents();
+    this.render();
+  },
+
+  bindEvents() {
+    document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+      if (confirm('Clear all run history? This cannot be undone.')) {
+        Storage.clearHistory();
+        this.render();
+        Toast.show('History cleared.', 'info');
+      }
+    });
+
+    document.getElementById('historyStatusFilter').addEventListener('change', () => this.render());
+  },
+
+  /**
+   * Render history table
+   */
+  render() {
+    const tbody = document.getElementById('historyTableBody');
+    const emptyState = document.getElementById('emptyHistory');
+    const filter = document.getElementById('historyStatusFilter').value;
+
+    let entries = Storage.getHistory();
+    if (filter !== 'all') {
+      entries = entries.filter(e => e.status === filter);
+    }
+
+    tbody.innerHTML = '';
+
+    if (entries.length === 0) {
+      emptyState.style.display = 'flex';
+      document.querySelector('#view-history .history-table-wrapper').style.display = 'none';
+      return;
+    }
+
+    emptyState.style.display = 'none';
+    document.querySelector('#view-history .history-table-wrapper').style.display = 'block';
+
+    entries.forEach(entry => {
+      const tr = document.createElement('tr');
+
+      const statusClass = entry.status === 'success' ? 'success' :
+                          entry.status === 'failed' ? 'failed' : 'running';
+
+      tr.innerHTML = `
+        <td>${this.escape(entry.workflowName || 'Untitled')}</td>
+        <td><span class="status-badge ${statusClass}">${entry.status}</span></td>
+        <td>${this.formatDate(entry.startedAt || entry.timestamp)}</td>
+        <td>${entry.duration ? entry.duration + 'ms' : '—'}</td>
+        <td>
+          <button class="btn btn-sm btn-outline view-run" data-id="${entry.id}">View</button>
+          <button class="btn btn-sm btn-danger delete-run" data-id="${entry.id}">Delete</button>
+        </td>
+      `;
+
+      tr.querySelector('.delete-run').addEventListener('click', () => {
+        this.deleteEntry(entry.id);
+      });
+
+      tr.querySelector('.view-run').addEventListener('click', () => {
+        this.viewEntry(entry);
+      });
+
+      tbody.appendChild(tr);
+    });
+  },
+
+  /**
+   * Delete a single history entry
+   */
+  deleteEntry(id) {
+    const history = Storage.getHistory().filter(h => h.id !== id);
+    localStorage.setItem(Storage.userKey('history'), JSON.stringify(history));
+    this.render();
+    Toast.show('Entry deleted.', 'info');
+  },
+
+  /**
+   * View a history entry
+   */
+  viewEntry(entry) {
+    const details = [
+      `Workflow: ${entry.workflowName || 'Untitled'}`,
+      `Status: ${entry.status}`,
+      `Started: ${this.formatDate(entry.startedAt || entry.timestamp)}`,
+      `Duration: ${entry.duration ? entry.duration + 'ms' : 'N/A'}`,
+      entry.completedAt ? `Completed: ${this.formatDate(entry.completedAt)}` : '',
+      `ID: ${entry.id}`
+    ].filter(Boolean).join('\n');
+    alert(details);
+  },
+
+  escape(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  },
+
+  formatDate(dateStr) {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr);
+    return d.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  }
+};
+
+/**
+ * AI Flow — Integrations Module
+ * Manages integration cards for all supported services.
+ */
+
+const Integrations = {
+  integrationList: [
+    { key: 'gmail', name: 'Gmail', icon: '📧', color: '#EA4335', description: 'Send and read emails via Gmail API' },
+    { key: 'telegram', name: 'Telegram', icon: '📨', color: '#26A5E4', description: 'Send messages via Telegram Bot API' },
+    { key: 'whatsapp', name: 'WhatsApp', icon: '💚', color: '#25D366', description: 'Send messages via WhatsApp Business API' },
+    { key: 'sheets', name: 'Google Sheets', icon: '📊', color: '#34A853', description: 'Read and write Google Sheets data' },
+    { key: 'slack', name: 'Slack', icon: '💬', color: '#4A154B', description: 'Send messages and interact with Slack' },
+    { key: 'discord', name: 'Discord', icon: '🎮', color: '#5865F2', description: 'Send messages via Discord webhooks' },
+    { key: 'twitter', name: 'X (Twitter)', icon: '🐦', color: '#1DA1F2', description: 'Post tweets and read feeds' },
+    { key: 'notion', name: 'Notion', icon: '📝', color: '#000000', description: 'Create and update Notion pages' },
+    { key: 'github', name: 'GitHub', icon: '🐙', color: '#333333', description: 'Manage repos, issues, and PRs' },
+    { key: 'stripe', name: 'Stripe', icon: '💳', color: '#635BFF', description: 'Process payments and manage subscriptions' },
+    { key: 'webhook', name: 'Custom Webhook', icon: '🔗', color: '#8B5CF6', description: 'Receive data from any HTTP source' },
+    { key: 'http', name: 'HTTP API', icon: '🌐', color: '#06B6D4', description: 'Call any REST API endpoint' }
+  ],
+
+  init() {
+    this.render();
+    this.bindEvents();
+  },
+
+  render() {
+    const container = document.getElementById('integrationsGrid');
+    const states = Storage.getIntegrations();
+
+    container.innerHTML = '';
+
+    this.integrationList.forEach(integration => {
+      const isConnected = !!states[integration.key];
+
+      const card = document.createElement('div');
+      card.className = 'integration-card' + (isConnected ? ' connected' : '');
+      card.innerHTML = `
+        <div class="integration-card-icon" style="background:${integration.color}20;color:${integration.color}">
+          ${integration.icon}
+        </div>
+        <div class="integration-card-info">
+          <div class="integration-card-name">${integration.name}</div>
+          <div class="integration-card-status ${isConnected ? 'connected-status' : 'disconnected-status'}">
+            ${isConnected ? '✓ Connected' : '○ Not connected'}
+          </div>
+        </div>
+        <button class="btn btn-sm ${isConnected ? 'btn-outline' : 'btn-primary'}"
+                data-integration="${integration.key}">
+          ${isConnected ? 'Disconnect' : 'Connect'}
+        </button>
+      `;
+
+      container.appendChild(card);
+    });
+  },
+
+  bindEvents() {
+    document.getElementById('integrationsGrid').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-integration]');
+      if (!btn) return;
+
+      const key = btn.dataset.integration;
+      const states = Storage.getIntegrations();
+
+      if (states[key]) {
+        // Disconnect
+        delete states[key];
+        Storage.saveIntegration(key, null);
+        Toast.show('Disconnected from ' + this.getIntegrationName(key), 'info');
+      } else {
+        // Simulate connect (in production, this would redirect to OAuth)
+        Storage.saveIntegration(key, {
+          connectedAt: new Date().toISOString(),
+          status: 'active'
+        });
+        Toast.show('Connected to ' + this.getIntegrationName(key) + '!', 'success');
+      }
+
+      this.render();
+    });
+  },
+
+  getIntegrationName(key) {
+    const found = this.integrationList.find(i => i.key === key);
+    return found ? found.name : key;
+  }
+};
+
+/**
+ * AI Flow — Google Gemini API Module
+ * Handles all API calls to Google Gemini.
+ * Uses the Gemini REST API directly.
+ */
+
+const GeminiAPI = {
+  /**
+   * Base URL for Gemini API
+   */
+  BASE_URL: 'https://generativelanguage.googleapis.com/v1beta',
+
+  /**
+   * Generate content using the Gemini API
+   * @param {string} prompt - The user prompt
+   * @param {string} model - Model name (gemini-2.0-flash, gemini-2.0-pro, etc.)
+   * @param {number} temperature - Temperature (0-1)
+   * @param {number} maxTokens - Maximum output tokens
+   * @returns {Promise<string>} - Generated text response
+   */
+  async generate(prompt, model = 'gemini-2.0-flash', temperature = 0.7, maxTokens = 2048) {
+    const config = Storage.getAgentConfig();
+    if (!config || !config.apiKey) {
+      throw new Error('Gemini API key not configured. Please add your API key in AI Agent settings.');
+    }
+
+    const apiKey = config.apiKey;
+    const url = `${this.BASE_URL}/models/${model}:generateContent?key=${apiKey}`;
+
+    const body = {
+      contents: [
+        {
+          parts: [
+            { text: prompt }
+          ]
+        }
+      ],
+      generationConfig: {
+        temperature: temperature,
+        maxOutputTokens: maxTokens,
+        topP: 0.95,
+        topK: 40
+      }
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMsg = errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`;
+
+        if (response.status === 400) {
+          throw new Error('Invalid request: ' + errorMsg);
+        } else if (response.status === 401 || response.status === 403) {
+          throw new Error('Invalid API key or permission denied. Please check your Gemini API key.');
+        } else if (response.status === 429) {
+          throw new Error('Rate limit exceeded. Please try again later.');
+        } else if (response.status === 404) {
+          throw new Error(`Model "${model}" not found. Please check the model name.`);
+        } else {
+          throw new Error('Gemini API error: ' + errorMsg);
+        }
+      }
+
+      const data = await response.json();
+
+      // Extract text from response
+      if (data.candidates && data.candidates.length > 0) {
+        const candidate = data.candidates[0];
+        if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+          return candidate.content.parts[0].text || '';
+        }
+      }
+
+      // Check for safety blocks
+      if (data.promptFeedback?.blockReason) {
+        throw new Error('Content blocked: ' + data.promptFeedback.blockReason);
+      }
+
+      throw new Error('No response generated. The model returned an empty result.');
+    } catch (e) {
+      if (e.message.startsWith('Gemini API') || e.message.startsWith('Invalid') ||
+          e.message.startsWith('Rate') || e.message.startsWith('Model') ||
+          e.message.startsWith('Content') || e.message.startsWith('No response')) {
+        throw e;
+      }
+      throw new Error('Network error: ' + e.message);
+    }
+  },
+
+  /**
+   * Stream content using the Gemini API (server-sent events)
+   * @param {string} prompt - The user prompt
+   * @param {Function} onChunk - Callback for each text chunk
+   * @param {string} model - Model name
+   * @param {number} temperature - Temperature
+   */
+  async generateStream(prompt, onChunk, model = 'gemini-2.0-flash', temperature = 0.7) {
+    const config = Storage.getAgentConfig();
+    if (!config || !config.apiKey) {
+      throw new Error('Gemini API key not configured.');
+    }
+
+    const apiKey = config.apiKey;
+    const url = `${this.BASE_URL}/models/${model}:streamGenerateContent?alt=sse&key=${apiKey}`;
+
+    const body = {
+      contents: [
+        {
+          parts: [
+            { text: prompt }
+          ]
+        }
+      ],
+      generationConfig: {
+        temperature: temperature,
+        maxOutputTokens: 4096,
+        topP: 0.95,
+        topK: 40
+      }
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error?.message || `HTTP ${response.status}`);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const jsonStr = line.slice(6).trim();
+            if (!jsonStr || jsonStr === '[DONE]') continue;
+
+            try {
+              const data = JSON.parse(jsonStr);
+              if (data.candidates && data.candidates[0]?.content?.parts) {
+                const text = data.candidates[0].content.parts[0]?.text || '';
+                if (text) onChunk(text);
+              }
+            } catch {
+              // Skip malformed JSON lines
+            }
+          }
+        }
+      }
+    } catch (e) {
+      throw new Error('Stream error: ' + e.message);
+    }
+  },
+
+  /**
+   * Count tokens for a given text
+   * @param {string} text - The text to count tokens for
+   * @param {string} model - Model name
+   * @returns {Promise<number>} - Token count
+   */
+  async countTokens(text, model = 'gemini-2.0-flash') {
+    const config = Storage.getAgentConfig();
+    if (!config || !config.apiKey) {
+      throw new Error('Gemini API key not configured.');
+    }
+
+    const apiKey = config.apiKey;
+    const url = `${this.BASE_URL}/models/${model}:countTokens?key=${apiKey}`;
+
+    const body = {
+      contents: [
+        {
+          parts: [{ text }]
+        }
+      ]
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      throw new Error('Token counting failed: HTTP ' + response.status);
+    }
+
+    const data = await response.json();
+    return data.totalTokens || 0;
+  }
+};
+
+/**
+ * AI Flow — Application Orchestration
+ * Initializes the app, manages navigation, theme, and coordinates all modules.
+ */
+
+const App = {
+  currentView: 'workflows',
+
+  /**
+   * Initialize the entire application
+   */
+  init() {
+    // Init toast first
+    Toast.init();
+
+    // Init theme
+    this.initTheme();
+
+    // Init auth
+    Auth.init();
+
+    // Init builder
+    Builder.init();
+
+    // If already authenticated (session exists), show app immediately
+    if (Auth.isAuthenticated()) {
+      Auth.showApp();
+      this.loadCurrentView();
+    }
+  },
+
+  /**
+   * Initialize theme (light/dark mode)
+   */
+  initTheme() {
+    const savedTheme = Storage.getTheme();
+    this.applyTheme(savedTheme);
+
+    // Theme toggle (auth overlay)
+    const toggleAuth = document.getElementById('themeToggleAuth');
+    if (toggleAuth) {
+      toggleAuth.addEventListener('click', () => this.toggleTheme());
+    }
+
+    // Theme toggle (sidebar)
+    const toggleSide = document.getElementById('themeToggleSide');
+    if (toggleSide) {
+      toggleSide.addEventListener('click', () => this.toggleTheme());
+    }
+  },
+
+  /**
+   * Apply a theme to the document
+   */
+  applyTheme(theme) {
+    document.body.setAttribute('data-theme', theme);
+    Storage.saveTheme(theme);
+
+    // Update toggle button icon
+    const toggleSide = document.getElementById('themeToggleSide');
+    if (toggleSide) {
+      toggleSide.textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
+  },
+
+  /**
+   * Toggle between light and dark themes
+   */
+  toggleTheme() {
+    const current = document.body.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    this.applyTheme(next);
+  },
+
+  /**
+   * Load the current view after auth
+   */
+  loadCurrentView() {
+    // Default: show workflows
+    this.navigate('workflows');
+
+    // If there's an active workflow in builder, we could also auto-switch
+    // But for a fresh session, workflows is the right landing
+  },
+
+  /**
+   * Navigate to a specific view
+   */
+  navigate(viewName) {
+    this.currentView = viewName;
+
+    // Update nav
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.toggle('active', item.dataset.view === viewName);
+    });
+
+    // Update view panels
+    document.querySelectorAll('.view-panel').forEach(panel => {
+      panel.classList.remove('active');
+    });
+
+    const targetPanel = document.getElementById('view-' + viewName);
+    if (targetPanel) {
+      targetPanel.classList.add('active');
+    }
+
+    // Update title
+    const titles = {
+      workflows: 'Workflows',
+      builder: 'Workflow Builder',
+      agent: 'AI Agent',
+      chat: 'AI Chat',
+      history: 'Run History',
+      integrations: 'Integrations'
+    };
+    document.getElementById('viewTitle').textContent = titles[viewName] || viewName;
+
+    // Initialize view-specific modules on first visit
+    switch (viewName) {
+      case 'workflows':
+        Workflows.render();
+        break;
+      case 'agent':
+        if (!this._agentInited) { Agent.init(); this._agentInited = true; }
+        break;
+      case 'chat':
+        if (!this._chatInited) { Chat.init(); this._chatInited = true; }
+        break;
+      case 'history':
+        if (!this._historyInited) { History.init(); this._historyInited = true; }
+        History.render();
+        break;
+      case 'integrations':
+        if (!this._integrationsInited) { Integrations.init(); this._integrationsInited = true; }
+        break;
+    }
+  },
+
+  /**
+   * Load a workflow into the builder view
+   */
+  loadBuilder(workflowId) {
+    Builder.loadWorkflow(workflowId);
+  },
+
+  /**
+   * Bind all global navigation events
+   */
+  bindNavigation() {
+    // Sidebar nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const view = item.dataset.view;
+        this.navigate(view);
+
+        // Close mobile sidebar if open
+        document.getElementById('sidebar').classList.remove('open');
+      });
+    });
+
+    // Hamburger for mobile
+    const hamburger = document.getElementById('hamburgerBtn');
+    const sidebar = document.getElementById('sidebar');
+
+    hamburger.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768) {
+        if (!sidebar.contains(e.target) && e.target !== hamburger && !hamburger.contains(e.target)) {
+          sidebar.classList.remove('open');
+        }
+      }
+    });
+  }
+};
+
+// ============================================================
+// Initialize when DOM is ready
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  App.bindNavigation();
+  App.init();
+
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        overlay.classList.remove('active');
+      }
+    });
+  });
+
+  console.log('🚀 AI Flow — Workflow Automation Platform Ready');
+  console.log('Features: Drag-and-drop builder | AI Agent | AI Chat | Webhooks | Gmail | Telegram | WhatsApp | Google Sheets | Database | History | Auth | Dark Mode');
+  console.log('AI powered by Google Gemini API');
+  console.log('No frameworks, no build step — pure HTML, CSS, JavaScript');
+});
+
+
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"3279d41ec7804124a29acc6e692f9a2b","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
